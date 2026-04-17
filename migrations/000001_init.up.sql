@@ -2,13 +2,13 @@ CREATE SCHEMA coffe_plus;
 CREATE TABLE coffe_plus.users (
     id              UUID             PRIMARY KEY,
     version         BIGINT           DEFAULT 1,
-    password_hash   VARCHAR(100)    CHECK ( char_length(password_hash) BETWEEN 6 AND 100 ),
+    password_hash   TEXT             CHECK ( char_length(password_hash) >= 3),
     first_name      VARCHAR(100)     CHECK ( char_length(first_name) BETWEEN 3 AND 100),
     last_name       VARCHAR(100)     CHECK ( char_length(last_name) BETWEEN 3 AND 100),
     created_at      TIMESTAMPTZ,
     email           VARCHAR(250) UNIQUE NOT NULL,
     phone_number    VARCHAR(15)      CHECK (
-        phone_number ~ '^\+[0-9]+$'
+        phone_number ~ '^\+?[0-9]{10,13}$'
         AND
         char_length (phone_number) BETWEEN 10 AND 13
     ),

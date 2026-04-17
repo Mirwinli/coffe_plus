@@ -19,6 +19,21 @@ func (s *AuthService) Register(
 	params auth_ports_in.RegisterAuthParams,
 ) (auth_ports_in.RegisterAuthResult, error) {
 
+	user := domain.NewUserUninitialized(
+		params.FirstName,
+		params.LastName,
+		params.Password,
+		params.Email,
+		params.PhoneNumber,
+	)
+
+	if err := user.Validate(); err != nil {
+		return auth_ports_in.RegisterAuthResult{}, fmt.Errorf(
+			"user validate: %w",
+			err,
+		)
+	}
+
 	passHash, err := bcrypt.GenerateFromPassword([]byte(params.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return auth_ports_in.RegisterAuthResult{}, fmt.Errorf(
@@ -27,20 +42,7 @@ func (s *AuthService) Register(
 		)
 	}
 
-	user := domain.NewUserUninitialized(
-		params.FirstName,
-		params.LastName,
-		string(passHash),
-		params.Email,
-		params.PhoneNumber,
-	)
-
-	if err = user.Validate(); err != nil {
-		return auth_ports_in.RegisterAuthResult{}, fmt.Errorf(
-			"user validate: %w",
-			err,
-		)
-	}
+	user.Password = string(passHash)
 
 	in := auth_ports_out.NewSaveUserAuthParams(user)
 

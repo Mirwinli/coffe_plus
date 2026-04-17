@@ -64,11 +64,6 @@ func main() {
 	}
 	defer redisPool.Close()
 
-	if err != nil {
-		logger.Fatal("failed to init postgres connection pool", zap.Error(err))
-	}
-	defer postgresPool.Close()
-
 	logger.Debug("initializing JWT config")
 	JWTConfig := core_http_jwt.NewMustConfig()
 
@@ -85,7 +80,6 @@ func main() {
 		core_http_middleware.CORS(httpConfig.AllowedOrigins),
 		core_http_middleware.RequestID(),
 		core_http_middleware.Logger(logger),
-		//core_http_middleware.UserID(JWTConfig),
 		core_http_middleware.Trace(),
 		core_http_middleware.Panic(),
 	)
