@@ -1,0 +1,1 @@
+DROP TABLE coffe_plus.refresh_tokens

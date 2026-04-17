@@ -1,0 +1,358 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Cafe-Shop Application API scheme",
+        "title": "Golang Cafe-Shop API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:5050",
+    "basePath": "/api/v1",
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "description": "Вхід вже зареєстрованого користувача в систему",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Вхід",
+                "parameters": [
+                    {
+                        "description": "Login тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Користувач",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginResponse"
+                        },
+                        "headers": {
+                            "Set-Cookie": {
+                                "type": "string",
+                                "description": "refresh_token=...; Path=/; SameSite=Strict; Max-Age=2592000; HttpOnly; Secure"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "delete": {
+                "description": "Видалення refresh токену та скасування access токену у зареєстрованого користувача",
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Вихід",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "refresh_token=your_token_here",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Успішний вихід"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/refresh": {
+            "post": {
+                "description": "Видалення та зміна refresh токен та створення нового access токен",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Зміна access та refresh токенів",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "refresh_token=your_token_here",
+                        "name": "Cookie",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success\" {header:string:Set-Cookie:\"Session cookie\"}",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid token",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "Створення нового користувача в системі",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Реєстрація",
+                "parameters": [
+                    {
+                        "description": "Register тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Користувач",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.RegisterResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string",
+                    "example": "error message"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "message"
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.AuthLoginRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "email@gmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 6,
+                    "example": "123password"
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.AuthLoginResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "access_token"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "First Name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Last Name"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string",
+                    "example": "common"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "1dsa-123s-1s"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.RegisterRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "first_name",
+                "last_name",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "email@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "First Name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "Last Name"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 6,
+                    "example": "123password"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "maxLength": 13,
+                    "minLength": 10,
+                    "example": "+380974526180"
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string",
+                    "example": "access_token"
+                },
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "First Name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Last Name"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string",
+                    "example": "common"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "1dsa-123s-1s"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        }
+    }
+}
