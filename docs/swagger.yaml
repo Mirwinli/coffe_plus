@@ -1,0 +1,252 @@
+basePath: /api/v1
+definitions:
+  github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse:
+    properties:
+      error:
+        example: error message
+        type: string
+      message:
+        example: message
+        type: string
+    type: object
+  internal_feature_auth_adapters_in_transport_http.AuthLoginRequest:
+    properties:
+      email:
+        example: email@gmail.com
+        maxLength: 100
+        minLength: 3
+        type: string
+      password:
+        example: 123password
+        maxLength: 100
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  internal_feature_auth_adapters_in_transport_http.AuthLoginResponse:
+    properties:
+      access_token:
+        example: access_token
+        type: string
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        example: email@gmail.com
+        type: string
+      first_name:
+        example: First Name
+        type: string
+      last_name:
+        example: Last Name
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        example: common
+        type: string
+      user_id:
+        example: 1dsa-123s-1s
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.RegisterRequest:
+    properties:
+      email:
+        example: email@gmail.com
+        maxLength: 100
+        minLength: 3
+        type: string
+      first_name:
+        example: First Name
+        maxLength: 100
+        minLength: 3
+        type: string
+      last_name:
+        example: Last Name
+        maxLength: 100
+        minLength: 3
+        type: string
+      password:
+        example: 123password
+        maxLength: 100
+        minLength: 6
+        type: string
+      phone_number:
+        example: "+380974526180"
+        maxLength: 13
+        minLength: 10
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  internal_feature_auth_adapters_in_transport_http.RegisterResponse:
+    properties:
+      access_token:
+        example: access_token
+        type: string
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        example: email@gmail.com
+        type: string
+      first_name:
+        example: First Name
+        type: string
+      last_name:
+        example: Last Name
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        example: common
+        type: string
+      user_id:
+        example: 1dsa-123s-1s
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+host: 127.0.0.1:5050
+info:
+  contact: {}
+  description: Cafe-Shop Application API scheme
+  title: Golang Cafe-Shop API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Вхід вже зареєстрованого користувача в систему
+      parameters:
+      - description: Login тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Користувач
+          headers:
+            Set-Cookie:
+              description: refresh_token=...; Path=/; SameSite=Strict; Max-Age=2592000;
+                HttpOnly; Secure
+              type: string
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      summary: Вхід
+      tags:
+      - auth
+  /auth/logout:
+    delete:
+      description: Видалення refresh токену та скасування access токену у зареєстрованого
+        користувача
+      parameters:
+      - description: refresh_token=your_token_here
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      responses:
+        "204":
+          description: Успішний вихід
+        "401":
+          description: Unauthorized
+        "500":
+          description: Internal server error
+      summary: Вихід
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      description: Видалення та зміна refresh токен та створення нового access токен
+      parameters:
+      - description: refresh_token=your_token_here
+        in: header
+        name: Cookie
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success" {header:string:Set-Cookie:"Session cookie"}
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.AuthLoginResponse'
+        "401":
+          description: Invalid token
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      summary: Зміна access та refresh токенів
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Створення нового користувача в системі
+      parameters:
+      - description: Register тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Користувач
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.RegisterResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      summary: Реєстрація
+      tags:
+      - auth
+swagger: "2.0"

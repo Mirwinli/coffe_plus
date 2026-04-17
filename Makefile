@@ -52,3 +52,20 @@ env-port-forward:
 
 env-port-close:
 	@docker compose down port-forwarder
+
+siteapp-run:
+	@export LOGGER_FOLDER=${PROJECT_ROOT}/out/logs && \
+	export POSTGRES_HOST=localhost && \
+	export REDIS_HOST=localhost && \
+	export JWT_SECRET && \
+	go run ${PROJECT_ROOT}/cmd/coffe-plus/main.go
+
+swagger-gen:
+	@docker compose run --rm --entrypoint sh swagger \
+	-c 'swag init -g cmd/coffe-plus/main.go \
+	-d ./,internal/core/errors \
+	--parseInternal \
+	--parseDependency \
+	-o docs'
+ps:
+	@docker ps
