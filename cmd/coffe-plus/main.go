@@ -83,7 +83,11 @@ func main() {
 	logger.Debug("initializing feature", zap.String("feature", "categories"))
 	categoryRepository := category_adapters_out.NewCategoryRepository(postgresPool)
 	categoryService := category_service.NewCategoryService(categoryRepository)
-	categoryHTTPHandler := category_adapters_in.NewCategoryHTTPHandler(categoryService)
+	categoryHTTPHandler := category_adapters_in.NewCategoryHTTPHandler(
+		categoryService,
+		JWTConfig,
+		authRepository,
+	)
 
 	logger.Debug("initializing feature", zap.String("feature", "products"))
 	imageLoader, err := core_infrastructure_cloudinary.NewCloudinaryUploader(
@@ -93,10 +97,14 @@ func main() {
 		logger.Fatal("failed to initialize cloudinary uploader", zap.Error(err))
 	}
 
-	postgresRepository := products_adapters_out_postgres.NewRepository(postgresPool)
-	productsRepository := products_adapters_out_cache.NewCacheRepository(redisPool, postgresRepository)
+	productPostgresRepository := products_adapters_out_postgres.NewRepository(postgresPool)
+	productsRepository := products_adapters_out_cache.NewCacheRepository(redisPool, productPostgresRepository)
 	productsService := products_service.NewProductService(productsRepository, imageLoader)
-	productsHTTPHandler := products_adapters_in_products_transport_http.NewProductsHTTPHandler(productsService)
+	productsHTTPHandler := products_adapters_in_products_transport_http.NewProductsHTTPHandler(
+		productsService,
+		JWTConfig,
+		authRepository,
+	)
 
 	logger.Debug("initializing HTTP server")
 	httpConfig := core_http_server.NewMustConfig()

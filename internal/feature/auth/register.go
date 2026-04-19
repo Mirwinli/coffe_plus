@@ -34,7 +34,7 @@ func (s *AuthService) Register(
 		)
 	}
 
-	passHash, err := bcrypt.GenerateFromPassword([]byte(params.Password), bcrypt.DefaultCost)
+	passHash, err := bcrypt.GenerateFromPassword([]byte(params.Password), 12)
 	if err != nil {
 		return auth_ports_in.RegisterAuthResult{}, fmt.Errorf(
 			"hashing password: %w",

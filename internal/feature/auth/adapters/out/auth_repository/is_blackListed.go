@@ -14,7 +14,7 @@ func (r *AuthRepository) IsUserBlackListed(
 	params auth_ports_out.IsBlackListedParams,
 ) (bool, error) {
 
-	cmd := r.redisPool.Get(ctx, "blacklist:"+params.IDAccess.String())
+	cmd := r.redisPool.Get(ctx, "blacklist:"+params.IDAccess)
 	if _, err := cmd.Bytes(); err != nil {
 		if errors.Is(err, core_redis_pool.ErrNotFound) {
 			return false, nil
