@@ -38,7 +38,7 @@ func BlackListAccessToken(control AccessTokenBlackList) Middleware {
 				return
 			}
 
-			ok, err := control.IsUserBlackListed(
+			isBlacklisted, err := control.IsUserBlackListed(
 				ctx,
 				auth_ports_out.NewIsBlackListedParams(id),
 			)
@@ -49,7 +49,7 @@ func BlackListAccessToken(control AccessTokenBlackList) Middleware {
 				)
 				return
 			}
-			if ok {
+			if isBlacklisted {
 				responseHandler.ErrorResponse(
 					core_errors.ErrUnauthorized,
 					"access denied",
@@ -84,7 +84,6 @@ func ParseJWTToken(config core_http_jwt.Config) Middleware {
 
 			next.ServeHTTP(w, r.WithContext(ctxWithValue))
 		})
-
 	}
 }
 
