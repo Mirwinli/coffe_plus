@@ -57,6 +57,12 @@ func (h *HTTPResponseHandler) ErrorResponse(err error, msg string) {
 	case errors.Is(err, core_errors.ErrInvalidCredentials):
 		statusCode = http.StatusUnauthorized
 		logFunc = h.log.Warn
+	case errors.Is(err, core_errors.ErrForeignKeyViolation):
+		statusCode = http.StatusConflict
+		logFunc = h.log.Warn
+	case errors.Is(err, core_errors.ErrUniqueViolation):
+		statusCode = http.StatusConflict
+		logFunc = h.log.Warn
 	default:
 		statusCode = http.StatusInternalServerError
 		logFunc = h.log.Warn

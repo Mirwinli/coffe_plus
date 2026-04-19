@@ -66,7 +66,7 @@ func (p *Pool) QueryRow(ctx context.Context, sql string, args ...any) core_postg
 func (p *Pool) Exec(ctx context.Context, sql string, args ...any) (core_postgres_pool.CommandTag, error) {
 	cmdTag, err := p.Pool.Exec(ctx, sql, args...)
 	if err != nil {
-		return nil, err
+		return nil, mapErrors(err)
 	}
 
 	return pgxCommandTag{cmdTag}, nil

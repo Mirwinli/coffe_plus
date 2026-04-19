@@ -32,6 +32,7 @@ type pgxCommandTag struct {
 func mapErrors(err error) error {
 	const (
 		pgxViolatesUniqueErrorCode = "23505"
+		pgxForeignKeyViolation     = "23503"
 	)
 
 	if errors.Is(err, pgx.ErrNoRows) {
@@ -45,6 +46,13 @@ func mapErrors(err error) error {
 				"%v: %w",
 				err,
 				core_postgres_pool.ErrViolatesUnique,
+			)
+		}
+		if pgErr.Code == pgxForeignKeyViolation {
+			return fmt.Errorf(
+				"%v: %w",
+				err,
+				core_postgres_pool.ErrForeignKeyViolation,
 			)
 		}
 	}

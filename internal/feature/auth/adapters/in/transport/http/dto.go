@@ -1,4 +1,4 @@
-package auth_transport_http
+package adapters_in_auth_transport_http
 
 import (
 	"time"

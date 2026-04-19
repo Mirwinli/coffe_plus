@@ -16,14 +16,22 @@ CREATE TABLE coffe_plus.users (
     role            VARCHAR(100) DEFAULT 'common'
 );
 
+CREATE TABLE coffe_plus.category (
+    id UUID PRIMARY KEY,
+    version BIGINT NOT NULL DEFAULT 1,
+    name VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) BETWEEN 3 AND 100)
+);
+
 CREATE TABLE coffe_plus.products (
     id           UUID PRIMARY KEY,
     version      BIGINT DEFAULT 1,
-    name         VARCHAR(100) NOT NULL,
-    description  VARCHAR(1000),
+    name         VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) BETWEEN 3 AND 100),
+    description  VARCHAR(1000)         CHECK ( char_length(description) BETWEEN 3 AND 1000),
     price        INTEGER NOT NULL,
     is_available BOOLEAN NOT NULL,
-    image_url    VARCHAR(1000) NOT NULL
+    category_id   UUID NOT NULL REFERENCES coffe_plus.category(id),
+    public_id    TEXT NOT NULL,
+    image_url    TEXT NOT NULL
 );
 
 CREATE TABLE coffe_plus.orders (

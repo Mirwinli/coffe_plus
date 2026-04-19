@@ -7,11 +7,11 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-type StringCmd struct {
+type goredisStringCmd struct {
 	*redis.StringCmd
 }
 
-func (c StringCmd) Bytes() ([]byte, error) {
+func (c goredisStringCmd) Bytes() ([]byte, error) {
 	data, err := c.StringCmd.Bytes()
 	if err != nil {
 		return nil, mapError(err)
@@ -20,17 +20,17 @@ func (c StringCmd) Bytes() ([]byte, error) {
 	return data, nil
 }
 
-type StatusCmd struct {
+type goredisStatusCmd struct {
 	*redis.StatusCmd
 }
 
-type IntCmd struct {
+type goredisIntCmd struct {
 	*redis.IntCmd
 }
 
 func mapError(err error) error {
 	if errors.Is(err, redis.Nil) {
-		return core_redis_pool.ErrNil
+		return core_redis_pool.ErrNotFound
 	}
 
 	return err
