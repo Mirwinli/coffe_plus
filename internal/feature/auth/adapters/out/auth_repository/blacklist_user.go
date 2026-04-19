@@ -14,7 +14,7 @@ func (r *AuthRepository) BlackListUser(
 ) error {
 	ttl := time.Until(in.ExpiresAt.Time)
 
-	cmd := r.redisPool.Set(ctx, "blacklist:"+in.IDAccess.String(), "1", ttl)
+	cmd := r.redisPool.Set(ctx, "blacklist:"+in.IDAccess, "1", ttl)
 	if err := cmd.Err(); err != nil {
 		return fmt.Errorf("set blacklist: %w", err)
 	}

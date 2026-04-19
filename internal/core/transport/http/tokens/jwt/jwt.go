@@ -10,8 +10,8 @@ import (
 )
 
 type Claims struct {
-	UserID uuid.UUID
-	Role   string
+	UserID uuid.UUID `json:"UserID"`
+	Role   string    `json:"Role"`
 	jwt.RegisteredClaims
 }
 

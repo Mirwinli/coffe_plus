@@ -49,3 +49,6 @@ CREATE TABLE coffe_plus.order_items (
     quantity        BIGINT  NOT NULL,
     price_at_time   DECIMAL NOT NULL
 );
+
+INSERT INTO coffe_plus.users (id,password_hash, first_name, last_name, created_at, email, phone_number,role)
+VALUES (gen_random_uuid(),'$2a$12$PtJeLujI1V7zaULvLqteG.uhPzLrhX8cNblBAgghlJz5XcVPVz7hK','Назар','Кушнірюк',NOW(),'mirwinli.tech@gmail.com','0974526184','admin');

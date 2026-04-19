@@ -1,12 +1,10 @@
 package auth_ports_out
 
-import "github.com/google/uuid"
-
 type IsBlackListedParams struct {
-	IDAccess uuid.UUID
+	IDAccess string
 }
 
-func NewIsBlackListedParams(idAccess uuid.UUID) IsBlackListedParams {
+func NewIsBlackListedParams(idAccess string) IsBlackListedParams {
 	return IsBlackListedParams{
 		IDAccess: idAccess,
 	}
