@@ -9,6 +9,7 @@ import (
 	"time"
 
 	core_config "github.com/Mirwinli/coffe_plus/internal/core/config"
+	core_infrastructure_cloudinary "github.com/Mirwinli/coffe_plus/internal/core/infrastructure/cloudinary"
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
 	core_goredis_pool "github.com/Mirwinli/coffe_plus/internal/core/repository/cached/redis/pool/goredis"
 	core_postgres_pgx "github.com/Mirwinli/coffe_plus/internal/core/repository/postgres/pool/pgx"
@@ -18,6 +19,13 @@ import (
 	auth_service "github.com/Mirwinli/coffe_plus/internal/feature/auth"
 	auth_transport_http "github.com/Mirwinli/coffe_plus/internal/feature/auth/adapters/in/transport/http"
 	"github.com/Mirwinli/coffe_plus/internal/feature/auth/adapters/out/auth_repository"
+	category_service "github.com/Mirwinli/coffe_plus/internal/feature/category"
+	category_adapters_in "github.com/Mirwinli/coffe_plus/internal/feature/category/adapters/in"
+	category_adapters_out "github.com/Mirwinli/coffe_plus/internal/feature/category/adapters/out"
+	products_service "github.com/Mirwinli/coffe_plus/internal/feature/products"
+	products_adapters_in_products_transport_http "github.com/Mirwinli/coffe_plus/internal/feature/products/adapters/in/transport/http"
+	products_adapters_out_cache "github.com/Mirwinli/coffe_plus/internal/feature/products/adapters/out/cache"
+	products_adapters_out_postgres "github.com/Mirwinli/coffe_plus/internal/feature/products/adapters/out/postgres"
 	"go.uber.org/zap"
 
 	_ "github.com/Mirwinli/coffe_plus/docs"
@@ -72,6 +80,24 @@ func main() {
 	authService := auth_service.NewAuthService(authRepository, JWTConfig)
 	authHTTPHandler := auth_transport_http.NewAuthHTTPHandler(authService, JWTConfig)
 
+	logger.Debug("initializing feature", zap.String("feature", "categories"))
+	categoryRepository := category_adapters_out.NewCategoryRepository(postgresPool)
+	categoryService := category_service.NewCategoryService(categoryRepository)
+	categoryHTTPHandler := category_adapters_in.NewCategoryHTTPHandler(categoryService)
+
+	logger.Debug("initializing feature", zap.String("feature", "products"))
+	imageLoader, err := core_infrastructure_cloudinary.NewCloudinaryUploader(
+		*core_infrastructure_cloudinary.NewMustConfig(),
+	)
+	if err != nil {
+		logger.Fatal("failed to initialize cloudinary uploader", zap.Error(err))
+	}
+
+	postgresRepository := products_adapters_out_postgres.NewRepository(postgresPool)
+	productsRepository := products_adapters_out_cache.NewCacheRepository(redisPool, postgresRepository)
+	productsService := products_service.NewProductService(productsRepository, imageLoader)
+	productsHTTPHandler := products_adapters_in_products_transport_http.NewProductsHTTPHandler(productsService)
+
 	logger.Debug("initializing HTTP server")
 	httpConfig := core_http_server.NewMustConfig()
 	httpServer := core_http_server.NewHTTPServer(
@@ -86,6 +112,8 @@ func main() {
 
 	apiVersionRouterV1 := core_http_server.NewApiVersionRouter(core_http_server.ApiVersion1)
 	apiVersionRouterV1.RegisterRoutes(authHTTPHandler.Routes()...)
+	apiVersionRouterV1.RegisterRoutes(productsHTTPHandler.Routes()...)
+	apiVersionRouterV1.RegisterRoutes(categoryHTTPHandler.Routes()...)
 
 	httpServer.RegisterApiVersionRouter(apiVersionRouterV1)
 	httpServer.RegisterSwagger()

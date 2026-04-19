@@ -37,31 +37,31 @@ func NewPool(ctx context.Context, config Config) (*Pool, error) {
 func (p *Pool) Get(ctx context.Context, key string) core_redis_pool.StringCmd {
 	cmd := p.client.Get(ctx, key)
 
-	return StringCmd{cmd}
+	return goredisStringCmd{cmd}
 }
 
 func (p *Pool) Set(ctx context.Context, key string, value any, ttl time.Duration) core_redis_pool.StatusCmd {
 	cmd := p.client.Set(ctx, key, value, ttl)
 
-	return StatusCmd{cmd}
+	return goredisStatusCmd{cmd}
 }
 
 func (p *Pool) Del(ctx context.Context, key ...string) core_redis_pool.IntCmd {
 	cmd := p.client.Del(ctx, key...)
 
-	return IntCmd{cmd}
+	return goredisIntCmd{cmd}
 }
 
 func (p *Pool) HGet(ctx context.Context, key string, field string) core_redis_pool.StringCmd {
 	cmd := p.client.HGet(ctx, key, field)
 
-	return StringCmd{cmd}
+	return goredisStringCmd{cmd}
 }
 
 func (p *Pool) HSet(ctx context.Context, key string, values ...any) core_redis_pool.IntCmd {
 	cmd := p.client.HSet(ctx, key, values...)
 
-	return IntCmd{cmd}
+	return goredisIntCmd{cmd}
 }
 
 func (p *Pool) Close() error {

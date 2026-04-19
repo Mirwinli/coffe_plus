@@ -46,3 +46,15 @@ func DecodeAndValidate(r *http.Request, dest any) error {
 
 	return nil
 }
+
+func ValidateRequest(request any) error {
+	if err := requestValidator.Struct(request); err != nil {
+		return fmt.Errorf(
+			"request validation: %v: %w",
+			err,
+			core_errors.ErrInvalidArgument,
+		)
+	}
+	
+	return nil
+}

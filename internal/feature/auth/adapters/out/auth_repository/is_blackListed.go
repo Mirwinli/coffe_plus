@@ -16,7 +16,7 @@ func (r *AuthRepository) IsUserBlackListed(
 
 	cmd := r.redisPool.Get(ctx, "blacklist:"+params.IDAccess.String())
 	if _, err := cmd.Bytes(); err != nil {
-		if errors.Is(err, core_redis_pool.ErrNil) {
+		if errors.Is(err, core_redis_pool.ErrNotFound) {
 			return false, nil
 		}
 		return false, fmt.Errorf("get access token redis: %w", err)

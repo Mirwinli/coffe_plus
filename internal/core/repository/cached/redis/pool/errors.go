@@ -5,5 +5,5 @@ import (
 )
 
 var (
-	ErrNil = errors.New("nil")
+	ErrNotFound = errors.New("not found")
 )
