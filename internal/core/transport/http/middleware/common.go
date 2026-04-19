@@ -2,13 +2,10 @@ package core_http_middleware
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"strings"
 	"time"
 
 	core_contextKeys "github.com/Mirwinli/coffe_plus/internal/core/contextKeys"
-	core_errors "github.com/Mirwinli/coffe_plus/internal/core/errors"
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
 	core_http_response "github.com/Mirwinli/coffe_plus/internal/core/transport/http/response"
 	core_http_jwt "github.com/Mirwinli/coffe_plus/internal/core/transport/http/tokens/jwt"
@@ -16,38 +13,25 @@ import (
 	"go.uber.org/zap"
 )
 
-func UserID(config core_http_jwt.Config) Middleware {
+func ParseJWTToken(config core_http_jwt.Config) Middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
 			log := core_logger.FromContext(ctx)
 			responseHandler := core_http_response.NewHTTPResponseHandler(log, w)
 
-			authHeader := r.Header.Get(AuthorizationHeaderKey)
-			if authHeader == "" {
-				responseHandler.ErrorResponse(
-					fmt.Errorf(
-						"access token required:%w",
-						core_errors.ErrUnauthorized,
-					),
-					"Missing Authorization header",
-				)
-				return
-			}
-
-			accessToken := strings.TrimPrefix(authHeader, "Bearer ")
-
-			claims, err := core_http_jwt.ParseToken(accessToken, config)
+			claims, err := getAndParseToken(r, config)
 			if err != nil {
 				responseHandler.ErrorResponse(
 					err,
-					"Failed to parse token",
+					"failed to parse JWT token",
 				)
 				return
 			}
 
 			ctxWithValue := context.WithValue(ctx, core_contextKeys.UserIDCtxKey, claims.UserID)
 			ctxWithValue = context.WithValue(ctx, core_contextKeys.UserRoleCtxKey, claims.Role)
+			ctxWithValue = context.WithValue(ctx, core_contextKeys.JWTAccessIDCtxKey, claims.ID)
 
 			next.ServeHTTP(w, r.WithContext(ctxWithValue))
 		})
