@@ -6,12 +6,14 @@ import (
 )
 
 type GetProductParams struct {
-	ID uuid.UUID
+	ID            uuid.UUID
+	OnlyAvailable bool
 }
 
-func NewGetProductParams(id uuid.UUID) GetProductParams {
+func NewGetProductParams(id uuid.UUID, available bool) GetProductParams {
 	return GetProductParams{
-		ID: id,
+		ID:            id,
+		OnlyAvailable: available,
 	}
 }
 

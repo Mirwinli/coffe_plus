@@ -20,7 +20,11 @@ func (r *ProductsRepository) GetProduct(
 
 	query := `SELECT id,version,name,description,price,is_available,public_id,image_url,category_id
 			  FROM coffe_plus.products
-			  WHERE id = $1;`
+			  WHERE id = $1`
+
+	if in.OnlyAvailable {
+		query += " AND is_available = TRUE;"
+	}
 
 	row := r.pool.QueryRow(ctx, query, in.ID)
 

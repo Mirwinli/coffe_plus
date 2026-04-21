@@ -19,6 +19,9 @@ import (
 	auth_service "github.com/Mirwinli/coffe_plus/internal/feature/auth"
 	auth_transport_http "github.com/Mirwinli/coffe_plus/internal/feature/auth/adapters/in/transport/http"
 	"github.com/Mirwinli/coffe_plus/internal/feature/auth/adapters/out/auth_repository"
+	cart_service "github.com/Mirwinli/coffe_plus/internal/feature/cart"
+	cart_adapters_in "github.com/Mirwinli/coffe_plus/internal/feature/cart/adapters/in"
+	cart_adapters_out_redis "github.com/Mirwinli/coffe_plus/internal/feature/cart/adapters/out/redis"
 	category_service "github.com/Mirwinli/coffe_plus/internal/feature/category"
 	category_adapters_in "github.com/Mirwinli/coffe_plus/internal/feature/category/adapters/in"
 	category_adapters_out "github.com/Mirwinli/coffe_plus/internal/feature/category/adapters/out"
@@ -106,6 +109,11 @@ func main() {
 		authRepository,
 	)
 
+	logger.Debug("initializing feature", zap.String("feature", "carts"))
+	cartsRepository := cart_adapters_out_redis.NewCartRepository(redisPool, productsRepository)
+	cartsService := cart_service.NewCartService(cartsRepository)
+	cartsHTTPHandler := cart_adapters_in.NewCartHTTPHandler(cartsService, JWTConfig)
+
 	logger.Debug("initializing HTTP server")
 	httpConfig := core_http_server.NewMustConfig()
 	httpServer := core_http_server.NewHTTPServer(
@@ -122,6 +130,7 @@ func main() {
 	apiVersionRouterV1.RegisterRoutes(authHTTPHandler.Routes()...)
 	apiVersionRouterV1.RegisterRoutes(productsHTTPHandler.Routes()...)
 	apiVersionRouterV1.RegisterRoutes(categoryHTTPHandler.Routes()...)
+	apiVersionRouterV1.RegisterRoutes(cartsHTTPHandler.Routes()...)
 
 	httpServer.RegisterApiVersionRouter(apiVersionRouterV1)
 	httpServer.RegisterSwagger()

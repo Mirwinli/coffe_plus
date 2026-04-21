@@ -8,17 +8,19 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Mirwinli/coffe_plus/internal/core/domain"
 	core_errors "github.com/Mirwinli/coffe_plus/internal/core/errors"
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
 	core_http_response "github.com/Mirwinli/coffe_plus/internal/core/transport/http/response"
 	products_ports_in "github.com/Mirwinli/coffe_plus/internal/feature/products/ports/in"
 	"github.com/google/uuid"
+	"github.com/shopspring/decimal"
 )
 
 type CreateProductRequest struct {
 	Name        string
 	Description *string
-	Price       float64
+	Price       domain.Money
 	IsAvailable *bool
 	CategoryID  uuid.UUID
 	ImageFile   multipart.File
@@ -28,6 +30,13 @@ type CreateProductRequest struct {
 type CreateProductResponse ProductDTOResponse
 
 func (r *CreateProductRequest) Validate() error {
+	if r.Price.IsZero() {
+		return fmt.Errorf(
+			"price must be not zero: %w",
+			core_errors.ErrInvalidArgument,
+		)
+	}
+
 	if r.CategoryID == uuid.Nil {
 		return fmt.Errorf(
 			"Category is required: %w",
@@ -150,10 +159,11 @@ func Parse(r *http.Request) (CreateProductRequest, error) {
 		)
 	}
 
-	price, err := strconv.ParseFloat(r.FormValue("price"), 64)
+	priceStr := r.FormValue("price")
+	price, err := decimal.NewFromString(priceStr)
 	if err != nil {
 		return CreateProductRequest{}, fmt.Errorf(
-			"convert string to float: %w", err,
+			"invalid price: %w",
 		)
 	}
 

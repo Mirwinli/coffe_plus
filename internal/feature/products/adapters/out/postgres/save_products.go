@@ -30,7 +30,7 @@ func (r *ProductsRepository) SaveProduct(
 		product.Name,
 		product.Description,
 		product.Price,
-		product.IsAvaible,
+		product.IsAvailable,
 		product.PublicID,
 		product.ImageURL,
 		product.CategoryID,

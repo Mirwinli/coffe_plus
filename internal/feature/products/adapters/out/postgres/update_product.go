@@ -38,7 +38,7 @@ func (r *ProductsRepository) UpdateProduct(
 		product.Name,
 		product.Description,
 		product.Price,
-		product.IsAvaible,
+		product.IsAvailable,
 		product.CategoryID,
 		product.ID,
 		product.Version,

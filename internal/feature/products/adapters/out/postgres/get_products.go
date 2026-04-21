@@ -30,6 +30,10 @@ func (r *ProductsRepository) GetProducts(
 		args = append(args, in.CategoryID)
 	}
 
+	if in.OnlyAvailable {
+		where += " AND is_available = TRUE"
+	}
+
 	finalQuery := fmt.Sprintf(query, where)
 
 	rows, err := r.pool.Query(ctx, finalQuery, args...)

@@ -64,6 +64,42 @@ func (p *Pool) HSet(ctx context.Context, key string, values ...any) core_redis_p
 	return goredisIntCmd{cmd}
 }
 
+func (p *Pool) HIncrBy(ctx context.Context, key, field string, incr int64) core_redis_pool.IntCmd {
+	cmd := p.client.HIncrBy(ctx, key, field, incr)
+
+	return goredisIntCmd{cmd}
+}
+
+func (p *Pool) HGetAll(ctx context.Context, key string) core_redis_pool.MapStringStringCmd {
+	cmd := p.client.HGetAll(ctx, key)
+
+	return goredisMapStringCmd{cmd}
+}
+
+func (p *Pool) HSetNX(ctx context.Context, key, field string, value interface{}) core_redis_pool.BoolCmd {
+	cmd := p.client.HSetNX(ctx, key, field, value)
+
+	return goredisBoolCmd{cmd}
+}
+
+func (p *Pool) Expire(ctx context.Context, key string, expiration time.Duration) core_redis_pool.BoolCmd {
+	cmd := p.client.Expire(ctx, key, expiration)
+
+	return goredisBoolCmd{cmd}
+}
+
+func (p *Pool) HDel(ctx context.Context, key string, fields ...string) core_redis_pool.IntCmd {
+	cmd := p.client.HDel(ctx, key, fields...)
+
+	return goredisIntCmd{cmd}
+}
+
+func (p *Pool) HExists(ctx context.Context, key, field string) core_redis_pool.BoolCmd {
+	cmd := p.client.HExists(ctx, key, field)
+
+	return goredisBoolCmd{cmd}
+}
+
 func (p *Pool) Close() error {
 	if err := p.client.Close(); err != nil {
 		return err

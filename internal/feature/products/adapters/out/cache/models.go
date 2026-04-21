@@ -14,7 +14,7 @@ type ProductModel struct {
 	Version     int
 	Name        string
 	Description *string
-	Price       float64
+	Price       domain.Money
 	IsAvaible   bool
 	ImageURL    string
 	PublicID    string
@@ -27,7 +27,7 @@ func domainToModel(product domain.Product) ProductModel {
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
-		IsAvaible:   product.IsAvaible,
+		IsAvaible:   product.IsAvailable,
 		ImageURL:    product.ImageURL,
 		PublicID:    product.PublicID,
 	}
@@ -40,7 +40,7 @@ func modelToDomain(product ProductModel) domain.Product {
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
-		IsAvaible:   product.IsAvaible,
+		IsAvailable: product.IsAvaible,
 		ImageURL:    product.ImageURL,
 		PublicID:    product.PublicID,
 	}
@@ -96,7 +96,7 @@ func productsListKey(categoryID *uuid.UUID) string {
 	return fmt.Sprintf("products:%s", *categoryID)
 }
 
-func productsListField(limit, offset *int) string {
+func productsListField(limit, offset *int, onlyAvailable bool) string {
 	ptrStr := func(v *int) string {
 		if v == nil {
 			return "nil"
@@ -104,7 +104,7 @@ func productsListField(limit, offset *int) string {
 		return strconv.Itoa(*v)
 	}
 
-	return fmt.Sprintf("%s:%s", ptrStr(limit), ptrStr(offset))
+	return fmt.Sprintf("%s:%s:%v", ptrStr(limit), ptrStr(offset), onlyAvailable)
 }
 
 func domainsToModel(productList []domain.Product) ProductListModel {

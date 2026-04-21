@@ -8,21 +8,21 @@ import (
 )
 
 type Product struct {
-	ID          uuid.UUID
-	Version     int
-	Name        string
-	Description *string
-	Price       float64
-	IsAvaible   bool
-	CategoryID  uuid.UUID
-	ImageURL    string
-	PublicID    string
+	ID          uuid.UUID `json:"id"`
+	Version     int       `json:"version"`
+	Name        string    `json:"name"`
+	Description *string   `json:"description"`
+	Price       Money     `json:"price"`
+	IsAvailable bool      `json:"is_available"`
+	CategoryID  uuid.UUID `json:"category_id"`
+	ImageURL    string    `json:"image_url"`
+	PublicID    string    `json:"public_id"`
 }
 
 func NewProductUninitialized(
 	name string,
 	description *string,
-	price float64,
+	price Money,
 	isAvaible bool,
 	categoryID uuid.UUID,
 	imageURL string,
@@ -35,7 +35,7 @@ func NewProductUninitialized(
 		Description: description,
 		Price:       price,
 		CategoryID:  categoryID,
-		IsAvaible:   isAvaible,
+		IsAvailable: isAvaible,
 		ImageURL:    imageURL,
 		PublicID:    publicID,
 	}
@@ -46,7 +46,7 @@ func NewProduct(
 	version int,
 	name string,
 	description *string,
-	price float64,
+	price Money,
 	isAvaible bool,
 	categoryID uuid.UUID,
 	imageURL string,
@@ -59,7 +59,7 @@ func NewProduct(
 		Description: description,
 		Price:       price,
 		CategoryID:  categoryID,
-		IsAvaible:   isAvaible,
+		IsAvailable: isAvaible,
 		ImageURL:    imageURL,
 		PublicID:    publicID,
 	}
@@ -97,7 +97,7 @@ func (p *Product) Validate() error {
 type ProductPatch struct {
 	Name        Nullable[string]
 	Description Nullable[string]
-	Price       Nullable[float64]
+	Price       Nullable[Money]
 	CategoryID  Nullable[uuid.UUID]
 	IsAvailable Nullable[bool]
 }
@@ -105,7 +105,7 @@ type ProductPatch struct {
 func NewProductPatch(
 	name Nullable[string],
 	description Nullable[string],
-	price Nullable[float64],
+	price Nullable[Money],
 	categoryID Nullable[uuid.UUID],
 	isAvailable Nullable[bool],
 ) ProductPatch {
@@ -156,7 +156,7 @@ func (p *Product) ApplyPatch(patch ProductPatch) error {
 	}
 
 	if patch.IsAvailable.Set {
-		tmp.IsAvaible = *patch.IsAvailable.Value
+		tmp.IsAvailable = *patch.IsAvailable.Value
 	}
 
 	if patch.CategoryID.Set {

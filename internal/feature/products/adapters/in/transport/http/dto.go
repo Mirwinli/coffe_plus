@@ -6,15 +6,15 @@ import (
 )
 
 type ProductDTOResponse struct {
-	ID          uuid.UUID `json:"id"`
-	Version     int       `json:"version"`
-	Name        string    `json:"name"`
-	Description *string   `json:"description"`
-	Price       float64   `json:"price"`
-	IsAvailable bool      `json:"is_available"`
-	CategoryID  uuid.UUID `json:"category_id"`
-	ImageURL    string    `json:"image_url"`
-	PublicID    string    `json:"public_id"`
+	ID          uuid.UUID    `json:"id"`
+	Version     int          `json:"version"`
+	Name        string       `json:"name"`
+	Description *string      `json:"description"`
+	Price       domain.Money `json:"price"`
+	IsAvailable bool         `json:"is_available"`
+	CategoryID  uuid.UUID    `json:"category_id"`
+	ImageURL    string       `json:"image_url"`
+	PublicID    string       `json:"public_id"`
 }
 
 func productDTOsFromDomains(products []domain.Product) []ProductDTOResponse {
@@ -33,7 +33,7 @@ func productDTOFromDomain(product domain.Product) ProductDTOResponse {
 		Name:        product.Name,
 		Description: product.Description,
 		Price:       product.Price,
-		IsAvailable: product.IsAvaible,
+		IsAvailable: product.IsAvailable,
 		CategoryID:  product.CategoryID,
 		ImageURL:    product.ImageURL,
 		PublicID:    product.PublicID,

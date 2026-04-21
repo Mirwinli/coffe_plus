@@ -15,7 +15,7 @@ func (r *CacheRepository) GetProduct(
 		return result, nil
 	}
 
-	params := products_ports_out.NewGetProductParams(in.ID)
+	params := products_ports_out.NewGetProductParams(in.ID, in.OnlyAvailable)
 
 	product, err := r.mainRepository.GetProduct(ctx, params)
 	if err != nil {
