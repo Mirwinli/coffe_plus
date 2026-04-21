@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	core_contextKeys "github.com/Mirwinli/coffe_plus/internal/core/contextKeys"
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
 	core_http_request "github.com/Mirwinli/coffe_plus/internal/core/transport/http/request"
 	core_http_response "github.com/Mirwinli/coffe_plus/internal/core/transport/http/response"
@@ -26,8 +27,14 @@ func (h *ProductsHTTPHandler) GetProducts(rw http.ResponseWriter, r *http.Reques
 		)
 		return
 	}
+	role := ctx.Value(core_contextKeys.UserRoleCtxKey)
 
-	in := products_ports_in.NewGetProductsParams(limit, offset, categoryID)
+	onlyAvailable := true
+	if role == "admin" {
+		onlyAvailable = false
+	}
+
+	in := products_ports_in.NewGetProductsParams(limit, offset, categoryID, onlyAvailable)
 	result, err := h.productsService.GetProducts(ctx, in)
 	if err != nil {
 		responseHandler.ErrorResponse(

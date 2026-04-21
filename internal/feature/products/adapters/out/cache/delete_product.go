@@ -19,7 +19,7 @@ func (r *CacheRepository) DeleteProduct(
 
 		repoGetProductResult, err := r.mainRepository.GetProduct(
 			ctx,
-			products_ports_out.NewGetProductParams(in.ID),
+			products_ports_out.NewGetProductParams(in.ID, false),
 		)
 		if err != nil {
 			return fmt.Errorf("get task: %w", err)

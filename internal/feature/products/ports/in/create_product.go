@@ -10,7 +10,7 @@ import (
 type CreateProductParams struct {
 	Name        string
 	Description *string
-	Price       float64
+	Price       domain.Money
 	IsAvailable bool
 	CategoryID  uuid.UUID
 	ImageFile   multipart.File
@@ -20,7 +20,7 @@ type CreateProductParams struct {
 func NewCreateProductParams(
 	name string,
 	description *string,
-	price float64,
+	price domain.Money,
 	isAvailable bool,
 	categoryID uuid.UUID,
 	imageFile multipart.File,

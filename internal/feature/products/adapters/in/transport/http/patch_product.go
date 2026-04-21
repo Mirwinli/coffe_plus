@@ -13,11 +13,11 @@ import (
 )
 
 type PatchProductRequest struct {
-	Name         core_http_types.Nullable[string]    `json:"name"`
-	Description  core_http_types.Nullable[string]    `json:"description"`
-	Price        core_http_types.Nullable[float64]   `json:"price"`
-	CategoryID   core_http_types.Nullable[uuid.UUID] `json:"category_id"`
-	Is_Available core_http_types.Nullable[bool]      `json:"is_available"`
+	Name         core_http_types.Nullable[string]       `json:"name"`
+	Description  core_http_types.Nullable[string]       `json:"description"`
+	Price        core_http_types.Nullable[domain.Money] `json:"price"`
+	CategoryID   core_http_types.Nullable[uuid.UUID]    `json:"category_id"`
+	Is_Available core_http_types.Nullable[bool]         `json:"is_available"`
 }
 
 type PatchProductResponse ProductDTOResponse

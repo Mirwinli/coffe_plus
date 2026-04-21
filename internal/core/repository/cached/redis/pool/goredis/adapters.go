@@ -28,6 +28,14 @@ type goredisIntCmd struct {
 	*redis.IntCmd
 }
 
+type goredisMapStringCmd struct {
+	*redis.MapStringStringCmd
+}
+
+type goredisBoolCmd struct {
+	*redis.BoolCmd
+}
+
 func mapError(err error) error {
 	if errors.Is(err, redis.Nil) {
 		return core_redis_pool.ErrNotFound

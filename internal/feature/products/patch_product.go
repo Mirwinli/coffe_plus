@@ -12,7 +12,7 @@ func (s *ProductsService) PatchProduct(
 	ctx context.Context,
 	in products_ports_in.PatchProductParams,
 ) (products_ports_in.PatchProductResult, error) {
-	getParams := products_ports_out.NewGetProductParams(in.ID)
+	getParams := products_ports_out.NewGetProductParams(in.ID, false)
 
 	result, err := s.ProductsRepository.GetProduct(ctx, getParams)
 	if err != nil {

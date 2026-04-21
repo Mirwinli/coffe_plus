@@ -12,7 +12,7 @@ func (s *ProductsService) DeleteProduct(
 	ctx context.Context,
 	in products_ports_in.DeleteProductParams,
 ) error {
-	params := products_ports_out.NewGetProductParams(in.ID)
+	params := products_ports_out.NewGetProductParams(in.ID, false)
 	product, err := s.ProductsRepository.GetProduct(ctx, params)
 	if err != nil {
 		return fmt.Errorf(

@@ -25,4 +25,8 @@ type ProductRepository interface {
 		ctx context.Context,
 		in DeleteProductParams,
 	) error
+	GetProductsByIDs(
+		ctx context.Context,
+		in GetProductsByIDsParams,
+	) (GetProductsByIDsResult, error)
 }

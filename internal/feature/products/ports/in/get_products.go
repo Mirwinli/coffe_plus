@@ -6,20 +6,23 @@ import (
 )
 
 type GetProductsParams struct {
-	Limit      *int
-	Offset     *int
-	CategoryID *uuid.UUID
+	Limit         *int
+	Offset        *int
+	CategoryID    *uuid.UUID
+	OnlyAvailable bool
 }
 
 func NewGetProductsParams(
 	limit *int,
 	offset *int,
 	categoryID *uuid.UUID,
+	onlyAvailable bool,
 ) GetProductsParams {
 	return GetProductsParams{
-		Limit:      limit,
-		Offset:     offset,
-		CategoryID: categoryID,
+		Limit:         limit,
+		Offset:        offset,
+		CategoryID:    categoryID,
+		OnlyAvailable: onlyAvailable,
 	}
 }
 

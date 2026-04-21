@@ -17,7 +17,7 @@ func (r *CacheRepository) GetProducts(
 	log := core_logger.FromContext(ctx)
 
 	key := productsListKey(in.CategoryID)
-	field := productsListField(in.Limit, in.Offset)
+	field := productsListField(in.Limit, in.Offset, in.OnlyAvailable)
 
 	bytes, err := r.pool.HGet(ctx, key, field).Bytes()
 	if err != nil {

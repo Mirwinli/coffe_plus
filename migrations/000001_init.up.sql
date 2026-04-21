@@ -27,7 +27,7 @@ CREATE TABLE coffe_plus.products (
     version      BIGINT DEFAULT 1,
     name         VARCHAR(100) UNIQUE NOT NULL CHECK ( char_length(name) BETWEEN 3 AND 100),
     description  VARCHAR(1000)         CHECK ( char_length(description) BETWEEN 3 AND 1000),
-    price        INTEGER NOT NULL,
+    price        NUMERIC(12, 2) NOT NULL,
     is_available BOOLEAN NOT NULL,
     category_id   UUID NOT NULL REFERENCES coffe_plus.category(id),
     public_id    TEXT NOT NULL,
