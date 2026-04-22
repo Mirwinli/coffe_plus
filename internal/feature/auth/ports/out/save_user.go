@@ -23,7 +23,7 @@ type SaveUserAuthResult struct {
 	FirstName   string
 	LastName    string
 	Email       string
-	PhoneNumber *string
+	PhoneNumber string
 	Role        string
 	CreatedAt   time.Time
 }
@@ -34,7 +34,7 @@ func NewSaveUserAuthResult(
 	firstName string,
 	lastName string,
 	email string,
-	phoneNumber *string,
+	phoneNumber string,
 	role string,
 	time time.Time,
 ) SaveUserAuthResult {

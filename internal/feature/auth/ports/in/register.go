@@ -18,7 +18,7 @@ type RegisterAuthParams struct {
 	FirstName   string
 	LastName    string
 	Email       string
-	PhoneNumber *string
+	PhoneNumber string
 	Password    string
 	DeviceName  string
 	IpAddress   *string
@@ -64,21 +64,19 @@ func (p *RegisterAuthParams) Validate() error {
 		)
 	}
 
-	if p.PhoneNumber != nil {
-		phoneNumberLen := len(*p.PhoneNumber)
-		if phoneNumberLen < 10 || phoneNumberLen > 13 {
-			return fmt.Errorf(
-				"phone number must be between 10 and 13 characters: %w",
-				core_errors.ErrInvalidArgument,
-			)
-		}
+	phoneNumberLen := len(p.PhoneNumber)
+	if phoneNumberLen < 10 || phoneNumberLen > 13 {
+		return fmt.Errorf(
+			"phone number must be between 10 and 13 characters: %w",
+			core_errors.ErrInvalidArgument,
+		)
+	}
 
-		if !phoneNumberRegex.MatchString(*p.PhoneNumber) {
-			return fmt.Errorf(
-				"invalid phone number: %w",
-				core_errors.ErrInvalidArgument,
-			)
-		}
+	if !phoneNumberRegex.MatchString(p.PhoneNumber) {
+		return fmt.Errorf(
+			"invalid phone number: %w",
+			core_errors.ErrInvalidArgument,
+		)
 	}
 
 	return nil
@@ -88,7 +86,7 @@ func NewRegisterAuthParams(
 	firstName string,
 	lastName string,
 	email string,
-	phoneNumber *string,
+	phoneNumber string,
 	password string,
 	deviceName string,
 	ipAddress *string,
@@ -110,7 +108,7 @@ type RegisterAuthResult struct {
 	FirstName    string
 	LastName     string
 	Email        string
-	PhoneNumber  *string
+	PhoneNumber  string
 	Role         string
 	CreatedAt    time.Time
 	AccessToken  string
@@ -123,7 +121,7 @@ func NewRegisterAuthResult(
 	firstName string,
 	lastName string,
 	email string,
-	phoneNumber *string,
+	phoneNumber string,
 	role string,
 	createdAt time.Time,
 	accessToken string,

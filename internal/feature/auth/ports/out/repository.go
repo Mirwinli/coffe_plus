@@ -15,6 +15,10 @@ type AuthRepository interface {
 		ctx context.Context,
 		in LoginUserAuthParams,
 	) (LoginUserAuthResult, error)
+	UpdateUser(
+		ctx context.Context,
+		in UpdateUserParams,
+	) (UpdateUserResult, error)
 	GetAndDeleteRefreshToken(
 		ctx context.Context,
 		in GetRefreshParams,

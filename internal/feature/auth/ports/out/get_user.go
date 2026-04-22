@@ -16,7 +16,7 @@ func NewGetUserParams(userID uuid.UUID) GetUserParams {
 }
 
 type GetUserResult struct {
-	domain.User
+	User domain.User
 }
 
 func NewGetUserResult(user domain.User) GetUserResult {

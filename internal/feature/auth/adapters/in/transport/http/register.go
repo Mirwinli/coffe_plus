@@ -10,11 +10,11 @@ import (
 )
 
 type RegisterRequest struct {
-	Email       string  `json:"email"       validate:"required,min=3,max=100"   example:"email@gmail.com"`
-	Password    string  `json:"password"    validate:"required,min=6,max=100"   example:"123password"`
-	FirstName   string  `json:"first_name"  validate:"required,min=3,max=100"   example:"First Name"`
-	LastName    string  `json:"last_name"   validate:"required,min=3,max=100"   example:"Last Name"`
-	PhoneNumber *string `json:"phone_number" validate:"omitempty,min=10,max=13" example:"+380974526180"`
+	Email       string `json:"email"       validate:"required,min=3,max=100"   example:"email@gmail.com"`
+	Password    string `json:"password"    validate:"required,min=6,max=100"   example:"123password"`
+	FirstName   string `json:"first_name"  validate:"required,min=3,max=100"   example:"First Name"`
+	LastName    string `json:"last_name"   validate:"required,min=3,max=100"   example:"Last Name"`
+	PhoneNumber string `json:"phone_number" validate:"required,min=10,max=13" example:"+380974526180"`
 }
 
 type RegisterResponse UserDTOResponse

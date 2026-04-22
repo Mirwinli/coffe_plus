@@ -11,7 +11,7 @@ type UserDTOResponse struct {
 	Version     int       `json:"version"      example:"1"`
 	FirstName   string    `json:"first_name"   example:"First Name"`
 	LastName    string    `json:"last_name"    example:"Last Name"`
-	PhoneNumber *string   `json:"phone_number" example:"+380974526180"`
+	PhoneNumber string    `json:"phone_number" example:"+380974526180"`
 	Email       string    `json:"email"        example:"email@gmail.com"`
 	Role        string    `json:"role"         example:"common"`
 	CreatedAt   time.Time `json:"created_at"   example:"0001-01-01T00:00:00Z"`

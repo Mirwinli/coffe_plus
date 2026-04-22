@@ -1,9 +1,11 @@
 package products_adapters_in_products_transport_http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/Mirwinli/coffe_plus/internal/core/domain"
+	core_errors "github.com/Mirwinli/coffe_plus/internal/core/errors"
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
 	core_http_request "github.com/Mirwinli/coffe_plus/internal/core/transport/http/request"
 	core_http_response "github.com/Mirwinli/coffe_plus/internal/core/transport/http/response"
@@ -18,6 +20,66 @@ type PatchProductRequest struct {
 	Price        core_http_types.Nullable[domain.Money] `json:"price"`
 	CategoryID   core_http_types.Nullable[uuid.UUID]    `json:"category_id"`
 	Is_Available core_http_types.Nullable[bool]         `json:"is_available"`
+}
+
+func (r *PatchProductRequest) Validate() error {
+	if r.Name.Set {
+		if r.Name.Value == nil {
+			return fmt.Errorf(
+				"name is required: %w",
+				core_errors.ErrInvalidArgument,
+			)
+		}
+		nameLen := len([]rune(*r.Name.Value))
+		if nameLen < 3 || nameLen > 100 {
+			return fmt.Errorf(
+				"name must be between 3 and 100 characters: %w",
+				core_errors.ErrInvalidArgument,
+			)
+		}
+	}
+	if r.Description.Set {
+		if r.Description.Value != nil {
+			descriptionLen := len([]rune(*r.Description.Value))
+			if descriptionLen < 3 || descriptionLen > 1000 {
+				return fmt.Errorf(
+					"description must be between 3 and 1000 characters: %w",
+					core_errors.ErrInvalidArgument,
+				)
+			}
+		}
+	}
+
+	if r.Price.Set {
+		if r.Price.Value == nil {
+			return fmt.Errorf(
+				"price is required: %w",
+				core_errors.ErrInvalidArgument,
+			)
+		}
+		if r.Price.Value.IsZero() {
+			return fmt.Errorf(
+				"price is zero: %w",
+				core_errors.ErrInvalidArgument,
+			)
+		}
+	}
+
+	if r.CategoryID.Set && r.CategoryID.Value == nil {
+		return fmt.Errorf(
+			"category_id is required: %w",
+			core_errors.ErrInvalidArgument,
+		)
+	}
+
+	if r.Is_Available.Set && r.Is_Available.Value == nil {
+		return fmt.Errorf(
+			"is_available is required: %w",
+			core_errors.ErrInvalidArgument,
+		)
+	}
+
+	return nil
 }
 
 type PatchProductResponse ProductDTOResponse

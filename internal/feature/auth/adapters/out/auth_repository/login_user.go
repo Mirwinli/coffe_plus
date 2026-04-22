@@ -19,7 +19,7 @@ func (r *AuthRepository) LoginUser(
 
 	query := `SELECT id,version,first_name,last_name,created_at,email,phone_number,password_hash,role
 			  FROM coffe_plus.users
-			  WHERE email = $1
+			  WHERE email = $1;
 			`
 
 	row := r.pool.QueryRow(ctx, query, in.Email)

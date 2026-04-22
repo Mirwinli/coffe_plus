@@ -11,6 +11,10 @@ type AuthService interface {
 		ctx context.Context,
 		in LoginAuthParams,
 	) (LoginAuthResult, error)
+	PatchUser(
+		ctx context.Context,
+		in PatchUserParams,
+	) (PatchUserResult, error)
 	Refresh(
 		ctx context.Context,
 		in RefreshAuthParams,

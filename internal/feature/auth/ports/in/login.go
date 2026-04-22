@@ -62,7 +62,7 @@ type LoginAuthResult struct {
 	FirstName    string
 	LastName     string
 	Email        string
-	PhoneNumber  *string
+	PhoneNumber  string
 	Role         string
 	AccessToken  string
 	RefreshToken string
@@ -74,7 +74,7 @@ func NewLoginAuthResult(
 	firstName string,
 	lastName string,
 	email string,
-	phoneNumber *string,
+	phoneNumber string,
 	role string,
 	accessToken string,
 	refreshToken string,

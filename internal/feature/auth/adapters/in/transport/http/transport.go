@@ -3,6 +3,7 @@ package adapters_in_auth_transport_http
 import (
 	"net/http"
 
+	core_http_middleware "github.com/Mirwinli/coffe_plus/internal/core/transport/http/middleware"
 	core_http_server "github.com/Mirwinli/coffe_plus/internal/core/transport/http/server"
 	core_http_jwt "github.com/Mirwinli/coffe_plus/internal/core/transport/http/tokens/jwt"
 	auth_ports_in "github.com/Mirwinli/coffe_plus/internal/feature/auth/ports/in"
@@ -39,6 +40,14 @@ func (h *AuthHTTPHandler) Routes() []core_http_server.Route {
 			Method:  http.MethodPost,
 			Path:    "/auth/login",
 			Handler: h.Login,
+		},
+		{
+			Method:  http.MethodPatch,
+			Path:    "/auth/user",
+			Handler: h.PatchUser,
+			Middleware: []core_http_middleware.Middleware{
+				core_http_middleware.ParseJWTToken(h.JWTConfig),
+			},
 		},
 		{
 			Method:  http.MethodDelete,

@@ -24,7 +24,7 @@ type LoginUserAuthResult struct {
 	FirstName    string
 	LastName     string
 	Email        string
-	PhoneNumber  *string
+	PhoneNumber  string
 	Role         string
 }
 
@@ -35,7 +35,7 @@ func NewLoginUserAuthResult(
 	firstName string,
 	lastName string,
 	email string,
-	phoneNumber *string,
+	phoneNumber string,
 	role string,
 ) LoginUserAuthResult {
 	return LoginUserAuthResult{

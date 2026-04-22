@@ -30,12 +30,15 @@ func (s *AuthService) Login(
 	if err != nil {
 		if errors.Is(err, core_errors.ErrNotFound) {
 			return auth_ports_in.LoginAuthResult{}, fmt.Errorf(
-				"invalid email or password: %w",
+				"invalidd email or password: %w",
 				core_errors.ErrInvalidCredentials,
 			)
 		}
 		return auth_ports_in.LoginAuthResult{}, fmt.Errorf("login user: %w", err)
 	}
+
+	fmt.Printf("DEBUG: DB Hash: [%s]\n", result.PasswordHash)
+	fmt.Printf("DEBUG: Req Pass: [%s]\n", params.Password)
 
 	err = bcrypt.CompareHashAndPassword([]byte(result.PasswordHash), []byte(params.Password))
 	if err != nil {

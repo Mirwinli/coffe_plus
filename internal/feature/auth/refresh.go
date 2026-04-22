@@ -69,7 +69,7 @@ func (s *AuthService) Refresh(
 
 	accessToken, err := core_http_jwt.CreateToken(
 		result.UserID,
-		userResult.Role,
+		userResult.User.Role,
 		s.JWTConfig,
 	)
 	if err != nil {
