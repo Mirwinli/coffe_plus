@@ -1,7 +1,6 @@
 package category_adapters_in
 
 import (
-	"fmt"
 	"net/http"
 
 	core_logger "github.com/Mirwinli/coffe_plus/internal/core/logger"
@@ -12,12 +11,25 @@ import (
 
 type GetAllCategoriesResponse []CategoryDTOResponse
 
+// GetAllCategories
+// @Summary Виведення всіх категорій
+// @Description Виведення всіх категорій продуктів
+// @Description Only for admins
+// @Tags category
+// @Security BearerAuth
+// @Produce json
+// @Param limit query int false "limit"
+// @Param offset query int false "offset"
+// @Success 200 {object} GetAllCategoriesResponse "Всі категорії"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /category [get]
 func (h *CategoryHTTPHandler) GetAllCategories(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
 	responseHandler := core_http_response.NewHTTPResponseHandler(log, rw)
 
-	offset, limit, err := getOffsetLimitQueryParams(r)
+	offset, limit, err := core_http_request.GetOffsetLimitQueryParams(r)
 	if err != nil {
 		responseHandler.ErrorResponse(
 			err,
@@ -40,29 +52,4 @@ func (h *CategoryHTTPHandler) GetAllCategories(rw http.ResponseWriter, r *http.R
 	response := GetAllCategoriesResponse(categoryDTOsFromDomains(categories.Categories))
 
 	responseHandler.JSONResponse(response, http.StatusOK)
-}
-
-func getOffsetLimitQueryParams(r *http.Request) (*int, *int, error) {
-	const (
-		limitQueryParam  = "limit"
-		offsetQueryParam = "offset"
-	)
-
-	limit, err := core_http_request.GetIntQueryParams(r, limitQueryParam)
-	if err != nil {
-		return nil, nil, fmt.Errorf(
-			"get `offset` query param: %w",
-			err,
-		)
-	}
-
-	offset, err := core_http_request.GetIntQueryParams(r, offsetQueryParam)
-	if err != nil {
-		return nil, nil, fmt.Errorf(
-			"get `offset` query param: %w",
-			err,
-		)
-	}
-
-	return offset, limit, nil
 }

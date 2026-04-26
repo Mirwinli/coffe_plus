@@ -57,5 +57,6 @@ func (r *AuthRepository) LoginUser(
 		userModel.Email,
 		userModel.PhoneNumber,
 		userModel.Role,
+		userModel.CreatedAt,
 	), nil
 }

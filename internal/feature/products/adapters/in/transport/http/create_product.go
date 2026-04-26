@@ -18,13 +18,13 @@ import (
 )
 
 type CreateProductRequest struct {
-	Name        string
-	Description *string
-	Price       domain.Money
-	IsAvailable *bool
-	CategoryID  uuid.UUID
-	ImageFile   multipart.File
-	ImageHeader *multipart.FileHeader
+	Name        string                `json:"name" example:"Pizza"`
+	Description *string               `json:"description" exampel:"this pizza too hot"`
+	Price       domain.Money          `json:"total_price" example:"123.0"`
+	IsAvailable *bool                 `json:"is_available" example:"true"`
+	CategoryID  uuid.UUID             `json:"category_id" example:"ba930185-467f-4031-b1bd-abf4899dffer"`
+	ImageFile   multipart.File        `json:"image" example:"image.png"`
+	ImageHeader *multipart.FileHeader `example:"dont need"`
 }
 
 type CreateProductResponse ProductDTOResponse
@@ -87,6 +87,25 @@ func (r *CreateProductRequest) Validate() error {
 	return nil
 }
 
+// CreateProduct godoc
+// @Summary Створення продукту
+// @Description Створення новго продукту
+// @Description Admin Only
+// @Tags product
+// @Security BearerAuth
+// @Produce json
+// @Accept multipart/form-data
+// @Param name formData string true "Назва продукту"
+// @Param price formData number true "Ціна"
+// @Param description formData string false "Опис"
+// @Param is_available formData bool true "Наявність"
+// @Param category_id formData string true "ID Категорії"
+// @Param image formData file true "Фото продукту"
+// @Success 201 {object} CreateProductResponse "Продукт"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /products [post]
 func (h *ProductsHTTPHandler) CreateProduct(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

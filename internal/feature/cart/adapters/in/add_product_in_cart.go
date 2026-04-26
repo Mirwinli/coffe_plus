@@ -14,12 +14,25 @@ import (
 )
 
 type AddProductInCartRequest struct {
-	ProductID uuid.UUID `json:"product_id"`
-	Quantity  int       `json:"quantity"`
+	ProductID uuid.UUID `json:"product_id" example:"ba930185-467f-4031-b1bd-abf4899dffer"`
+	Quantity  int       `json:"quantity"   example:"12"`
 }
 
 type AddProductInCartResponse CartDTOResponse
 
+// AddProductInCart
+// @Summary Додавання продукта в кошик та його створення
+// @Description Додавання продукта в кошик та одночасне створення кошика якщо він не був створений до цього часу
+// @Security BearerAuth
+// @Tags cart
+// @Accept json
+// @Produce json
+// @Param request body AddProductInCartRequest true "AddProductInCart тіло запиту"
+// @Success 201 {object} AddProductInCartResponse "Кошик"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cart [post]
 func (h *CartHTTPHandler) AddProductInCart(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
@@ -57,5 +70,5 @@ func (h *CartHTTPHandler) AddProductInCart(rw http.ResponseWriter, r *http.Reque
 		Cart: newCart.Cart,
 	}
 
-	responseHandler.JSONResponse(response, http.StatusOK)
+	responseHandler.JSONResponse(response, http.StatusCreated)
 }

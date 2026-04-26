@@ -1,5 +1,101 @@
 basePath: /api/v1
 definitions:
+  github_com_Mirwinli_coffe_plus_internal_core_domain.Cart:
+    properties:
+      created_at:
+        example: "2026-04-23T16:25:43.655439Z"
+        type: string
+      id:
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Item'
+        type: array
+      total_price:
+        example: 100.12
+        type: number
+      updated_at:
+        example: "2026-05-23T16:25:43.655439Z"
+        type: string
+    type: object
+  github_com_Mirwinli_coffe_plus_internal_core_domain.Item:
+    properties:
+      image_url:
+        example: https:/cloudinary/image12
+        type: string
+      name:
+        type: string
+      price_per_unit:
+        example: 12.1
+        type: number
+      product_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffec
+        type: string
+      quantity:
+        type: integer
+    type: object
+  github_com_Mirwinli_coffe_plus_internal_core_domain.Order:
+    properties:
+      created_at:
+        example: "2026-04-23T16:25:43.655439Z"
+        type: string
+      id:
+        example: 3d1c7344-a98d-4a6a-847a-caa29238cfer
+        type: string
+      items:
+        items:
+          $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.OrderItem'
+        type: array
+      order_receiver:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.OrderReceiver'
+      status:
+        example: cooking
+        type: string
+      total_price:
+        example: 120.1
+        type: number
+      version:
+        example: 1
+        type: integer
+    type: object
+  github_com_Mirwinli_coffe_plus_internal_core_domain.OrderItem:
+    properties:
+      id:
+        example: 3d1c7344-a98d-4a6a-847a-caa29238cfes
+        type: string
+      image_url:
+        example: https:cloudinry/image12
+        type: string
+      name:
+        example: pizza
+        type: string
+      price_at_time:
+        example: 21
+        type: number
+      product_id:
+        example: 3d1c7344-a98d-4a6a-847a-caa29238cfer
+        type: string
+      quantity:
+        example: 12
+        type: integer
+    type: object
+  github_com_Mirwinli_coffe_plus_internal_core_domain.OrderReceiver:
+    properties:
+      customer_id:
+        example: 3d1c7344-a98d-4a6a-847a-caa29238cfer
+        type: string
+      email:
+        example: email@gmail.com
+        type: string
+      first_name:
+        example: Max
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+    type: object
   github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse:
     properties:
       error:
@@ -49,11 +145,99 @@ definitions:
         example: common
         type: string
       user_id:
+        example: 1ba930185-467f-4031-b1bd-abf4899dffde
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.GetMyselfUserResponse:
+    properties:
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        type: string
+      first_name:
+        example: Max
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        type: string
+      user_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffde
+        type: string
+      version:
+        type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.GetUserResponse:
+    properties:
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        type: string
+      first_name:
+        example: Max
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        type: string
+      user_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffde
+        type: string
+      version:
+        type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.PatchUserResponse:
+    properties:
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        example: email@gmail.com
+        type: string
+      first_name:
+        example: First Name
+        type: string
+      last_name:
+        example: Last Name
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        example: common
+        type: string
+      user_id:
         example: 1dsa-123s-1s
         type: string
       version:
         example: 1
         type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.PatchUserSwaggerRequest:
+    properties:
+      first_name:
+        example: Max
+        type: string
+      last_name:
+        example: Trump
+        type: string
+      password:
+        example: 123456hs
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
     type: object
   internal_feature_auth_adapters_in_transport_http.RegisterRequest:
     properties:
@@ -87,6 +271,7 @@ definitions:
     - first_name
     - last_name
     - password
+    - phone_number
     type: object
   internal_feature_auth_adapters_in_transport_http.RegisterResponse:
     properties:
@@ -112,7 +297,264 @@ definitions:
         example: common
         type: string
       user_id:
-        example: 1dsa-123s-1s
+        example: 1ba930185-467f-4031-b1bd-abf4899dffde
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_auth_adapters_in_transport_http.UserDTOResponse:
+    properties:
+      created_at:
+        example: "0001-01-01T00:00:00Z"
+        type: string
+      email:
+        type: string
+      first_name:
+        example: Max
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        example: "+380974526180"
+        type: string
+      role:
+        type: string
+      user_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffde
+        type: string
+      version:
+        type: integer
+    type: object
+  internal_feature_cart_adapters_in.AddProductInCartRequest:
+    properties:
+      product_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      quantity:
+        example: 12
+        type: integer
+    type: object
+  internal_feature_cart_adapters_in.AddProductInCartResponse:
+    properties:
+      cart:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart'
+    type: object
+  internal_feature_cart_adapters_in.ListCartResponse:
+    properties:
+      cart:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart'
+    type: object
+  internal_feature_cart_adapters_in.UpdateQuantityItemResponse:
+    properties:
+      cart:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart'
+    type: object
+  internal_feature_category_adapters_in.CategoryDTOResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      name:
+        example: drinks
+        type: string
+    type: object
+  internal_feature_category_adapters_in.CreateCategoryRequest:
+    properties:
+      name:
+        example: Drinks
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - name
+    type: object
+  internal_feature_category_adapters_in.GetCategoryResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      name:
+        example: drinks
+        type: string
+    type: object
+  internal_feature_category_adapters_in.PatchCategoryResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      name:
+        example: drinks
+        type: string
+    type: object
+  internal_feature_category_adapters_in.PatchCategorySwaggerRequest:
+    properties:
+      name:
+        example: Drinks
+        type: string
+    type: object
+  internal_feature_order_adapters_in.AdminListOrdersResponse:
+    properties:
+      orders:
+        items:
+          $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order'
+        type: array
+    type: object
+  internal_feature_order_adapters_in.ListOrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order'
+    type: object
+  internal_feature_order_adapters_in.OrderDTOResponse:
+    properties:
+      order:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order'
+    type: object
+  internal_feature_order_adapters_in.OrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order'
+    type: object
+  internal_feature_order_adapters_in.PatchOrderRequest:
+    properties:
+      status:
+        example: completed
+        type: string
+    type: object
+  internal_feature_order_adapters_in.PatchOrderResponse:
+    properties:
+      order:
+        $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order'
+    type: object
+  internal_feature_products_adapters_in_transport_http.CreateProductResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      description:
+        example: this pizza to hot
+        type: string
+      id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      image_url:
+        example: https:cloudinary/image13
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Pizza
+        type: string
+      price:
+        example: 123
+        type: number
+      public_id:
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_products_adapters_in_transport_http.GetProductResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      description:
+        example: this pizza to hot
+        type: string
+      id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      image_url:
+        example: https:cloudinary/image13
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Pizza
+        type: string
+      price:
+        example: 123
+        type: number
+      public_id:
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_products_adapters_in_transport_http.PatchProductResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      description:
+        example: this pizza to hot
+        type: string
+      id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      image_url:
+        example: https:cloudinary/image13
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Pizza
+        type: string
+      price:
+        example: 123
+        type: number
+      public_id:
+        type: string
+      version:
+        example: 1
+        type: integer
+    type: object
+  internal_feature_products_adapters_in_transport_http.PatchUserSwaggerRequest:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffder
+        type: string
+      description:
+        example: this pizza too hot
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Pizza
+        type: string
+      price:
+        example: 120
+        type: number
+    type: object
+  internal_feature_products_adapters_in_transport_http.ProductDTOResponse:
+    properties:
+      category_id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      description:
+        example: this pizza to hot
+        type: string
+      id:
+        example: ba930185-467f-4031-b1bd-abf4899dffer
+        type: string
+      image_url:
+        example: https:cloudinary/image13
+        type: string
+      is_available:
+        example: true
+        type: boolean
+      name:
+        example: Pizza
+        type: string
+      price:
+        example: 123
+        type: number
+      public_id:
         type: string
       version:
         example: 1
@@ -125,6 +567,111 @@ info:
   title: Golang Cafe-Shop API
   version: "1.0"
 paths:
+  /admin/order:
+    get:
+      description: |-
+        Виведеняня замовленнь за їх статусом
+        Admin only
+      parameters:
+      - description: Order status filter
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Замовлення
+          schema:
+            $ref: '#/definitions/internal_feature_order_adapters_in.AdminListOrdersResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Виведенення замовлень
+      tags:
+      - order
+  /admin/users:
+    get:
+      description: |-
+        Вивести всіх користувачів
+        Only for admins
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Користувачі
+          schema:
+            items:
+              $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.UserDTOResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Всі користувачі
+      tags:
+      - users
+  /admin/users/{id}:
+    get:
+      description: |-
+        Отримати користувача за його ID
+        Only for admins
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Користувач
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.GetUserResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримати користувача
+      tags:
+      - users
   /auth/login:
     post:
       consumes:
@@ -249,4 +796,742 @@ paths:
       summary: Реєстрація
       tags:
       - auth
+  /auth/user:
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Зміна данних користувача
+        Номеру телефону,Прізвище або Імя,Пароль
+        Правила зміни полів:
+        1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся
+        2. **Явно передано значення**: `description`: "Вийти погуляти в 6:30 з собакою" - змінюєьтся поле в БД
+        Обмеження: Ніякі поля не можуть бути null
+      parameters:
+      - description: PatchUser тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.PatchUserSwaggerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Змінений користувач
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.PatchUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зміна користувача
+      tags:
+      - auth
+  /cart:
+    delete:
+      description: Видалення кошика та його вміст
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Видалення кошика
+      tags:
+      - cart
+    get:
+      description: Вивід кошика та його вміст
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Кошик
+          schema:
+            $ref: '#/definitions/internal_feature_cart_adapters_in.ListCartResponse'
+        "401":
+          description: Unautorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Вивід кошика
+      tags:
+      - cart
+    patch:
+      consumes:
+      - application/json
+      description: Зміна кількості продукту реалізована у вигляді додавання/віднімання
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Оновлений кошик
+          schema:
+            $ref: '#/definitions/internal_feature_cart_adapters_in.UpdateQuantityItemResponse'
+        "401":
+          description: Unathorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зміна кількості придмету в кошиці
+      tags:
+      - cart
+    post:
+      consumes:
+      - application/json
+      description: Додавання продукта в кошик та одночасне створення кошика якщо він
+        не був створений до цього часу
+      parameters:
+      - description: AddProductInCart тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_cart_adapters_in.AddProductInCartRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Кошик
+          schema:
+            $ref: '#/definitions/internal_feature_cart_adapters_in.AddProductInCartResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Додавання продукта в кошик та його створення
+      tags:
+      - cart
+  /cart/{id}:
+    delete:
+      description: |-
+        Видалення категорії продуктів зі системи
+        Щоб видалити категорію потрібно видалити спершу всі продукти цієї категорії
+        Only for admins
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Видалення категорії
+      tags:
+      - category
+  /category:
+    get:
+      description: |-
+        Виведення всіх категорій продуктів
+        Only for admins
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Всі категорії
+          schema:
+            items:
+              $ref: '#/definitions/internal_feature_category_adapters_in.CategoryDTOResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Виведення всіх категорій
+      tags:
+      - category
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Створення категорії продуктів
+        Only for admins
+      parameters:
+      - description: CreateCategory тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_category_adapters_in.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Категорія
+          schema:
+            $ref: '#/definitions/internal_feature_category_adapters_in.CreateCategoryRequest'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Створення категорії
+      tags:
+      - category
+  /category/{id}:
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Катугорія
+          schema:
+            $ref: '#/definitions/internal_feature_category_adapters_in.GetCategoryResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримання категорії
+      tags:
+      - category
+    patch:
+      consumes:
+      - application/json
+      description: Зміна полів категорії
+      parameters:
+      - description: PatchCategory тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_category_adapters_in.PatchCategorySwaggerRequest'
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Оновлена категорія
+          schema:
+            $ref: '#/definitions/internal_feature_category_adapters_in.PatchCategoryResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зміна категорії
+      tags:
+      - category
+  /order:
+    get:
+      description: Виведення всіх замовленнь корисутвача який кинув запит
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Замовлення
+          schema:
+            items:
+              $ref: '#/definitions/internal_feature_order_adapters_in.OrderDTOResponse'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Виведення всіх замовлень
+      tags:
+      - order
+    post:
+      description: |-
+        Кинути запит на замовлення
+        Запит може бути відхиленим або прийнятим,надсилання йього запиту не гарантує його виконання
+        Дані для замовлення берутся напряму з кошика
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Замовлення
+          schema:
+            $ref: '#/definitions/internal_feature_order_adapters_in.OrderResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Cart not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зробити замовлення
+      tags:
+      - order
+  /order/{id}:
+    get:
+      description: Отримання замовлення по його ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Замовлення
+          schema:
+            $ref: '#/definitions/internal_feature_order_adapters_in.ListOrderResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримання замовлення
+      tags:
+      - order
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Зміна статусу замовлення
+        Admin Only
+      parameters:
+      - description: PatchOrder тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_order_adapters_in.PatchOrderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Оновлене замовлення
+          schema:
+            $ref: '#/definitions/internal_feature_order_adapters_in.PatchOrderResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зміна статусу замовлення
+      tags:
+      - order
+  /products:
+    get:
+      parameters:
+      - description: category ID
+        in: query
+        name: category_id
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Продукт
+          schema:
+            items:
+              $ref: '#/definitions/internal_feature_products_adapters_in_transport_http.ProductDTOResponse'
+            type: array
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримання усіх продуктів
+      tags:
+      - product
+    post:
+      consumes:
+      - multipart/form-data
+      description: |-
+        Створення новго продукту
+        Admin Only
+      parameters:
+      - description: Назва продукту
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Ціна
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Опис
+        in: formData
+        name: description
+        type: string
+      - description: Наявність
+        in: formData
+        name: is_available
+        required: true
+        type: boolean
+      - description: ID Категорії
+        in: formData
+        name: category_id
+        required: true
+        type: string
+      - description: Фото продукту
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Продукт
+          schema:
+            $ref: '#/definitions/internal_feature_products_adapters_in_transport_http.CreateProductResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Створення продукту
+      tags:
+      - product
+  /products/{id}:
+    delete:
+      description: |-
+        ВИдалення продукта з системи
+        Admin Only
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Видалення продукта
+      tags:
+      - product
+    get:
+      description: Отримання продукту за його ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Продукт
+          schema:
+            $ref: '#/definitions/internal_feature_products_adapters_in_transport_http.GetProductResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримання продукту
+      tags:
+      - product
+    patch:
+      consumes:
+      - application/json
+      description: |-
+        Admin Only
+        Зміна полів продукта
+        ### Логіка оновлення полів (Three-state-logic)
+        1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся
+        2. **Явно передано значення**: `description`: "Дуже добра піца" - змінюєьтся поле в БД
+        Обмеження поле name,price,is_available,category_id не може бути null
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: PatchProduct тіло запиту
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_feature_products_adapters_in_transport_http.PatchUserSwaggerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Оновлений продукт
+          schema:
+            $ref: '#/definitions/internal_feature_products_adapters_in_transport_http.PatchProductResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "404":
+          description: Not found
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Зміна продукту
+      tags:
+      - product
+  /profile:
+    get:
+      description: Отримати свого користувача
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Користувач
+          schema:
+            $ref: '#/definitions/internal_feature_auth_adapters_in_transport_http.GetMyselfUserResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Отримати себе
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

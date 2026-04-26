@@ -7,11 +7,11 @@ import (
 )
 
 type Cart struct {
-	ID        uuid.UUID `json:"id"`
+	ID        uuid.UUID `json:"id" examle:"ba930185-467f-4031-b1bd-abf4899dffde"`
 	Items     []Item    `json:"items"`
-	Price     Money     `json:"total_price"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Price     Money     `json:"total_price" example:"100.12"`
+	CreatedAt time.Time `json:"created_at"  example:"2026-04-23T16:25:43.655439Z"`
+	UpdatedAt time.Time `json:"updated_at"  example:"2026-05-23T16:25:43.655439Z"`
 }
 
 func NewCart(
@@ -31,11 +31,11 @@ func NewCart(
 }
 
 type Item struct {
-	ProductID      uuid.UUID `json:"product_id"`
-	Name           string    `json:"name"`
-	ImageURL       string    `json:"image_url"`
-	Quantity       int       `json:"quantity"`
-	Price_Per_Unit Money     `json:"price_per_unit"`
+	ProductID      uuid.UUID `json:"product_id" example:"ba930185-467f-4031-b1bd-abf4899dffec"`
+	Name           string    `json:"name"   	example:"Pizza"`
+	ImageURL       string    `json:"image_url"  example:"https:/cloudinary/image12"`
+	Quantity       int       `json:"quantity"	example:"12"`
+	Price_Per_Unit Money     `json:"price_per_unit" example:"12.10"`
 }
 
 func NewItem(

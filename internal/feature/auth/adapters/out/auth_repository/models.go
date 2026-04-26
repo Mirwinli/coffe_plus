@@ -24,7 +24,17 @@ type RefreshModel struct {
 	ExpiresAt time.Time
 }
 
-func domainFromModel(userModel UserModel) domain.User {
+func DomainsFromModels(userModels []UserModel) []domain.User {
+	domains := make([]domain.User, len(userModels))
+
+	for i, user := range userModels {
+		domains[i] = DomainFromModel(user)
+	}
+
+	return domains
+}
+
+func DomainFromModel(userModel UserModel) domain.User {
 	return domain.User{
 		ID:          userModel.ID,
 		Version:     userModel.Version,

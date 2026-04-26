@@ -19,6 +19,14 @@ type AuthService interface {
 		ctx context.Context,
 		in RefreshAuthParams,
 	) (RefreshAuthResult, error)
+	GetUser(
+		ctx context.Context,
+		in GetUserParams,
+	) (GetUserResult, error)
+	GetAllUsers(
+		ctx context.Context,
+		in GetAllUsersParams,
+	) (GetAllUsersResult, error)
 	Logout(
 		ctx context.Context,
 		in LogoutAuthParams,

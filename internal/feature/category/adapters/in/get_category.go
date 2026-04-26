@@ -11,6 +11,18 @@ import (
 
 type GetCategoryResponse CategoryDTOResponse
 
+// GetCategory godoc
+// @Summary Отримання категорії
+// @Desciption Отримання категорії по ID
+// @Tags category
+// @Security BearerAuth
+// @Param id path string true "Category ID"
+// @Produce json
+// @Success 200 {object} GetCategoryResponse "Катугорія"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /category/{id} [get]
 func (h *CategoryHTTPHandler) GetCategory(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

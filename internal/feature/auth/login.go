@@ -37,9 +37,6 @@ func (s *AuthService) Login(
 		return auth_ports_in.LoginAuthResult{}, fmt.Errorf("login user: %w", err)
 	}
 
-	fmt.Printf("DEBUG: DB Hash: [%s]\n", result.PasswordHash)
-	fmt.Printf("DEBUG: Req Pass: [%s]\n", params.Password)
-
 	err = bcrypt.CompareHashAndPassword([]byte(result.PasswordHash), []byte(params.Password))
 	if err != nil {
 		return auth_ports_in.LoginAuthResult{}, fmt.Errorf(
@@ -89,6 +86,7 @@ func (s *AuthService) Login(
 		result.Email,
 		result.PhoneNumber,
 		result.Role,
+		result.CreatedAt,
 		accessToken,
 		refreshToken,
 	), nil

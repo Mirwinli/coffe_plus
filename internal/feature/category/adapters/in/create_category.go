@@ -11,11 +11,25 @@ import (
 )
 
 type CreateCategoryRequest struct {
-	Name string `json:"name" validate:"required,min=3,max=100"`
+	Name string `json:"name" validate:"required,min=3,max=100" example:"Drinks"`
 }
 
 type CreateCategoryResponse CategoryDTOResponse
 
+// CreateCategory godoc
+// @Summary Створення категорії
+// @Description Створення категорії продуктів
+// @Description Only for admins
+// @Tags category
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param request body CreateCategoryRequest true "CreateCategory тіло запиту"
+// @Success 201 {object} CreateCategoryRequest "Категорія"
+// @Failure 400 {object} core_http_response.ErrorResponse.ErrorResponse "Bad request"
+// @Failure 401 {object} core_http_response.ErrorResponse.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse.ErrorResponse "Internal server error"
+// @Router /category [post]
 func (h *CategoryHTTPHandler) CreateCategory(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

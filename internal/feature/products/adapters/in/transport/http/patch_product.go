@@ -14,6 +14,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type PatchUserSwaggerRequest struct {
+	Name        string       `json:"name" example:"Pizza"`
+	Description string       `json:"description" example:"this pizza too hot"`
+	Price       domain.Money `json:"price" example:"120.0"`
+	CategoryID  uuid.UUID    `json:"category_id" example:"ba930185-467f-4031-b1bd-abf4899dffder"`
+	IsAvailable bool         `json:"is_available" example:"true"`
+}
+
 type PatchProductRequest struct {
 	Name         core_http_types.Nullable[string]       `json:"name"`
 	Description  core_http_types.Nullable[string]       `json:"description"`
@@ -84,6 +92,28 @@ func (r *PatchProductRequest) Validate() error {
 
 type PatchProductResponse ProductDTOResponse
 
+// PatchProduct godc
+// @Summary Зміна продукту
+// @Description Admin Only
+// @Description Зміна полів продукта
+// @Description ### Логіка оновлення полів (Three-state-logic)
+// @Description 1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся
+// @Description 2. **Явно передано значення**: `description`: "Дуже добра піца" - змінюєьтся поле в БД
+// @Descroption 3. **Явно передано null**: `description`: null - очищає поле в БД (set to NULL)
+// @Description Обмеження поле name,price,is_available,category_id не може бути null
+// @Tags product
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Param id path string true "Product ID"
+// @Param request body PatchUserSwaggerRequest true "PatchProduct тіло запиту"
+// @Success 200 {object} PatchProductResponse "Оновлений продукт"
+// @Failure 409 {object} core_http_response.ErrorResponse "Conflict"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /products/{id} [patch]
 func (h *ProductsHTTPHandler) PatchProduct(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

@@ -6,8 +6,8 @@ import (
 )
 
 type CategoryDTOResponse struct {
-	ID   uuid.UUID
-	Name string
+	ID   uuid.UUID `json:"category_id" example:"ba930185-467f-4031-b1bd-abf4899dffer"`
+	Name string    `json:"name" example:"drinks"`
 }
 
 func categoryDTOFromDomain(category domain.Category) CategoryDTOResponse {
@@ -23,6 +23,6 @@ func categoryDTOsFromDomains(categories []domain.Category) []CategoryDTOResponse
 	for i, category := range categories {
 		dtos[i] = categoryDTOFromDomain(category)
 	}
-	
+
 	return dtos
 }

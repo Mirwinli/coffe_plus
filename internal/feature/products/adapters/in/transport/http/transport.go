@@ -54,7 +54,6 @@ func (h *ProductsHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.GetProduct,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
-				core_http_middleware.Admin(),
 				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},
@@ -64,7 +63,6 @@ func (h *ProductsHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.GetProducts,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
-				core_http_middleware.Admin(),
 				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},

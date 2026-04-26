@@ -14,14 +14,26 @@ import (
 )
 
 type UpdateQuantityItemRequest struct {
-	ProductID uuid.UUID `json:"product_id"`
-	Quantity  int       `json:"quantity"`
+	Quantity int `json:"quantity" example:"-1"`
 }
 
 type UpdateQuantityItemResponse struct {
 	Cart domain.Cart `json:"cart"`
 }
 
+// UpdateQuantityItem godoc
+// @Summary Зміна кількості придмету в кошиці
+// @Description Зміна кількості продукту реалізована у вигляді додавання/віднімання
+// @Tags cart
+// @Security BearerAuth
+// @Accept json
+// @Produce json
+// @Success 200 {object} UpdateQuantityItemResponse "Оновлений кошик"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 409 {object core_http_response.ErrorResponse "Conflict"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unathorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cart [patch]
 func (h *CartHTTPHandler) UpdateQuantityItem(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
@@ -36,6 +48,15 @@ func (h *CartHTTPHandler) UpdateQuantityItem(rw http.ResponseWriter, r *http.Req
 		return
 	}
 
+	productID, err := core_http_request.GetUUIDPathValue(r, "id")
+	if err != nil {
+		responseHandler.ErrorResponse(
+			err,
+			"failed to get `productID` path value",
+		)
+		return
+	}
+
 	var request UpdateQuantityItemRequest
 	if err := core_http_request.DecodeAndValidate(r, &request); err != nil {
 		responseHandler.ErrorResponse(
@@ -45,7 +66,7 @@ func (h *CartHTTPHandler) UpdateQuantityItem(rw http.ResponseWriter, r *http.Req
 		return
 	}
 
-	in := cart_ports_in.NewUpdateQuantityItemParams(cartID, request.ProductID, request.Quantity)
+	in := cart_ports_in.NewUpdateQuantityItemParams(cartID, productID, request.Quantity)
 	cart, err := h.cartService.UpdateQuantityItem(ctx, in)
 	if err != nil {
 		responseHandler.ErrorResponse(

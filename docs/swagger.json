@@ -9,6 +9,163 @@
     "host": "127.0.0.1:5050",
     "basePath": "/api/v1",
     "paths": {
+        "/admin/order": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Виведеняня замовленнь за їх статусом\nAdmin only",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Виведенення замовлень",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order status filter",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Замовлення",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_order_adapters_in.AdminListOrdersResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Вивести всіх користувачів\nOnly for admins",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Всі користувачі",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Користувачі",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.UserDTOResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Отримати користувача за його ID\nOnly for admins",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Отримати користувача",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Користувач",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.GetUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/auth/login": {
             "post": {
                 "description": "Вхід вже зареєстрованого користувача в систему",
@@ -194,9 +351,1248 @@
                     }
                 }
             }
+        },
+        "/auth/user": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Зміна данних користувача\nНомеру телефону,Прізвище або Імя,Пароль\nПравила зміни полів:\n1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся\n2. **Явно передано значення**: `description`: \"Вийти погуляти в 6:30 з собакою\" - змінюєьтся поле в БД\nОбмеження: Ніякі поля не можуть бути null",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Зміна користувача",
+                "parameters": [
+                    {
+                        "description": "PatchUser тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.PatchUserSwaggerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Змінений користувач",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.PatchUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Вивід кошика та його вміст",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Вивід кошика",
+                "responses": {
+                    "200": {
+                        "description": "Кошик",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_cart_adapters_in.ListCartResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unautorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Додавання продукта в кошик та одночасне створення кошика якщо він не був створений до цього часу",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Додавання продукта в кошик та його створення",
+                "parameters": [
+                    {
+                        "description": "AddProductInCart тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_cart_adapters_in.AddProductInCartRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Кошик",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_cart_adapters_in.AddProductInCartResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Видалення кошика та його вміст",
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Видалення кошика",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Зміна кількості продукту реалізована у вигляді додавання/віднімання",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Зміна кількості придмету в кошиці",
+                "responses": {
+                    "200": {
+                        "description": "Оновлений кошик",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_cart_adapters_in.UpdateQuantityItemResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unathorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Видалення категорії продуктів зі системи\nЩоб видалити категорію потрібно видалити спершу всі продукти цієї категорії\nOnly for admins",
+                "tags": [
+                    "category"
+                ],
+                "summary": "Видалення категорії",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/category": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Виведення всіх категорій продуктів\nOnly for admins",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Виведення всіх категорій",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Всі категорії",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_feature_category_adapters_in.CategoryDTOResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Створення категорії продуктів\nOnly for admins",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Створення категорії",
+                "parameters": [
+                    {
+                        "description": "CreateCategory тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_category_adapters_in.CreateCategoryRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Категорія",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_category_adapters_in.CreateCategoryRequest"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/category/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Отримання категорії",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Катугорія",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_category_adapters_in.GetCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Зміна полів категорії",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "category"
+                ],
+                "summary": "Зміна категорії",
+                "parameters": [
+                    {
+                        "description": "PatchCategory тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_category_adapters_in.PatchCategorySwaggerRequest"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Category ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Оновлена категорія",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_category_adapters_in.PatchCategoryResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Виведення всіх замовленнь корисутвача який кинув запит",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Виведення всіх замовлень",
+                "responses": {
+                    "200": {
+                        "description": "Замовлення",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_feature_order_adapters_in.OrderDTOResponse"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Кинути запит на замовлення\nЗапит може бути відхиленим або прийнятим,надсилання йього запиту не гарантує його виконання\nДані для замовлення берутся напряму з кошика",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Зробити замовлення",
+                "responses": {
+                    "201": {
+                        "description": "Замовлення",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_order_adapters_in.OrderResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Cart not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/order/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Отримання замовлення по його ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Отримання замовлення",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Order ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Замовлення",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_order_adapters_in.ListOrderResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Зміна статусу замовлення\nAdmin Only",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "order"
+                ],
+                "summary": "Зміна статусу замовлення",
+                "parameters": [
+                    {
+                        "description": "PatchOrder тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_order_adapters_in.PatchOrderRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Оновлене замовлення",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_order_adapters_in.PatchOrderResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Отримання усіх продуктів",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "category ID",
+                        "name": "category_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Продукт",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/internal_feature_products_adapters_in_transport_http.ProductDTOResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Створення новго продукту\nAdmin Only",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Створення продукту",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Назва продукту",
+                        "name": "name",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "number",
+                        "description": "Ціна",
+                        "name": "price",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Опис",
+                        "name": "description",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Наявність",
+                        "name": "is_available",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "ID Категорії",
+                        "name": "category_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "Фото продукту",
+                        "name": "image",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Продукт",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_products_adapters_in_transport_http.CreateProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/products/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Отримання продукту за його ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Отримання продукту",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Продукт",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_products_adapters_in_transport_http.GetProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "ВИдалення продукта з системи\nAdmin Only",
+                "tags": [
+                    "product"
+                ],
+                "summary": "Видалення продукта",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Admin Only\nЗміна полів продукта\n### Логіка оновлення полів (Three-state-logic)\n1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся\n2. **Явно передано значення**: `description`: \"Дуже добра піца\" - змінюєьтся поле в БД\nОбмеження поле name,price,is_available,category_id не може бути null",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "product"
+                ],
+                "summary": "Зміна продукту",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Product ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "PatchProduct тіло запиту",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_products_adapters_in_transport_http.PatchUserSwaggerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Оновлений продукт",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_products_adapters_in_transport_http.PatchProductResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "409": {
+                        "description": "Conflict",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/profile": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Отримати свого користувача",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Отримати себе",
+                "responses": {
+                    "200": {
+                        "description": "Користувач",
+                        "schema": {
+                            "$ref": "#/definitions/internal_feature_auth_adapters_in_transport_http.GetMyselfUserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "github_com_Mirwinli_coffe_plus_internal_core_domain.Cart": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2026-04-23T16:25:43.655439Z"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Item"
+                    }
+                },
+                "total_price": {
+                    "type": "number",
+                    "example": 100.12
+                },
+                "updated_at": {
+                    "type": "string",
+                    "example": "2026-05-23T16:25:43.655439Z"
+                }
+            }
+        },
+        "github_com_Mirwinli_coffe_plus_internal_core_domain.Item": {
+            "type": "object",
+            "properties": {
+                "image_url": {
+                    "type": "string",
+                    "example": "https:/cloudinary/image12"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price_per_unit": {
+                    "type": "number",
+                    "example": 12.1
+                },
+                "product_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffec"
+                },
+                "quantity": {
+                    "type": "integer"
+                }
+            }
+        },
+        "github_com_Mirwinli_coffe_plus_internal_core_domain.Order": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "2026-04-23T16:25:43.655439Z"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "3d1c7344-a98d-4a6a-847a-caa29238cfer"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.OrderItem"
+                    }
+                },
+                "order_receiver": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.OrderReceiver"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "cooking"
+                },
+                "total_price": {
+                    "type": "number",
+                    "example": 120.1
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "github_com_Mirwinli_coffe_plus_internal_core_domain.OrderItem": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "3d1c7344-a98d-4a6a-847a-caa29238cfes"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https:cloudinry/image12"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "pizza"
+                },
+                "price_at_time": {
+                    "type": "number",
+                    "example": 21
+                },
+                "product_id": {
+                    "type": "string",
+                    "example": "3d1c7344-a98d-4a6a-847a-caa29238cfer"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 12
+                }
+            }
+        },
+        "github_com_Mirwinli_coffe_plus_internal_core_domain.OrderReceiver": {
+            "type": "object",
+            "properties": {
+                "customer_id": {
+                    "type": "string",
+                    "example": "3d1c7344-a98d-4a6a-847a-caa29238cfer"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "Max"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                }
+            }
+        },
         "github_com_Mirwinli_coffe_plus_internal_core_transport_http_response.ErrorResponse": {
             "type": "object",
             "properties": {
@@ -264,11 +1660,135 @@
                 },
                 "user_id": {
                     "type": "string",
+                    "example": "1ba930185-467f-4031-b1bd-abf4899dffde"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.GetMyselfUserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "Max"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffde"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.GetUserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "Max"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffde"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.PatchUserResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "email@gmail.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "First Name"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Last Name"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string",
+                    "example": "common"
+                },
+                "user_id": {
+                    "type": "string",
                     "example": "1dsa-123s-1s"
                 },
                 "version": {
                     "type": "integer",
                     "example": 1
+                }
+            }
+        },
+        "internal_feature_auth_adapters_in_transport_http.PatchUserSwaggerRequest": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "type": "string",
+                    "example": "Max"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Trump"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "123456hs"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
                 }
             }
         },
@@ -278,7 +1798,8 @@
                 "email",
                 "first_name",
                 "last_name",
-                "password"
+                "password",
+                "phone_number"
             ],
             "properties": {
                 "email": {
@@ -346,13 +1867,389 @@
                 },
                 "user_id": {
                     "type": "string",
-                    "example": "1dsa-123s-1s"
+                    "example": "1ba930185-467f-4031-b1bd-abf4899dffde"
                 },
                 "version": {
                     "type": "integer",
                     "example": 1
                 }
             }
+        },
+        "internal_feature_auth_adapters_in_transport_http.UserDTOResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "example": "0001-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "Max"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "+380974526180"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffde"
+                },
+                "version": {
+                    "type": "integer"
+                }
+            }
+        },
+        "internal_feature_cart_adapters_in.AddProductInCartRequest": {
+            "type": "object",
+            "properties": {
+                "product_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "quantity": {
+                    "type": "integer",
+                    "example": 12
+                }
+            }
+        },
+        "internal_feature_cart_adapters_in.AddProductInCartResponse": {
+            "type": "object",
+            "properties": {
+                "cart": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart"
+                }
+            }
+        },
+        "internal_feature_cart_adapters_in.ListCartResponse": {
+            "type": "object",
+            "properties": {
+                "cart": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart"
+                }
+            }
+        },
+        "internal_feature_cart_adapters_in.UpdateQuantityItemResponse": {
+            "type": "object",
+            "properties": {
+                "cart": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Cart"
+                }
+            }
+        },
+        "internal_feature_category_adapters_in.CategoryDTOResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "drinks"
+                }
+            }
+        },
+        "internal_feature_category_adapters_in.CreateCategoryRequest": {
+            "type": "object",
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 100,
+                    "minLength": 3,
+                    "example": "Drinks"
+                }
+            }
+        },
+        "internal_feature_category_adapters_in.GetCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "drinks"
+                }
+            }
+        },
+        "internal_feature_category_adapters_in.PatchCategoryResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "drinks"
+                }
+            }
+        },
+        "internal_feature_category_adapters_in.PatchCategorySwaggerRequest": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "Drinks"
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.AdminListOrdersResponse": {
+            "type": "object",
+            "properties": {
+                "orders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order"
+                    }
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.ListOrderResponse": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order"
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.OrderDTOResponse": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order"
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.OrderResponse": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order"
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.PatchOrderRequest": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "example": "completed"
+                }
+            }
+        },
+        "internal_feature_order_adapters_in.PatchOrderResponse": {
+            "type": "object",
+            "properties": {
+                "order": {
+                    "$ref": "#/definitions/github_com_Mirwinli_coffe_plus_internal_core_domain.Order"
+                }
+            }
+        },
+        "internal_feature_products_adapters_in_transport_http.CreateProductResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "this pizza to hot"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https:cloudinary/image13"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Pizza"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 123
+                },
+                "public_id": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_feature_products_adapters_in_transport_http.GetProductResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "this pizza to hot"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https:cloudinary/image13"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Pizza"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 123
+                },
+                "public_id": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_feature_products_adapters_in_transport_http.PatchProductResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "this pizza to hot"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https:cloudinary/image13"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Pizza"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 123
+                },
+                "public_id": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        },
+        "internal_feature_products_adapters_in_transport_http.PatchUserSwaggerRequest": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffder"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "this pizza too hot"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Pizza"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 120
+                }
+            }
+        },
+        "internal_feature_products_adapters_in_transport_http.ProductDTOResponse": {
+            "type": "object",
+            "properties": {
+                "category_id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "this pizza to hot"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "ba930185-467f-4031-b1bd-abf4899dffer"
+                },
+                "image_url": {
+                    "type": "string",
+                    "example": "https:cloudinary/image13"
+                },
+                "is_available": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Pizza"
+                },
+                "price": {
+                    "type": "number",
+                    "example": 123
+                },
+                "public_id": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "integer",
+                    "example": 1
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

@@ -31,12 +31,14 @@ type AuthRepository interface {
 		ctx context.Context,
 		in GetUserParams,
 	) (GetUserResult, error)
-
+	GetAllUsers(
+		ctx context.Context,
+		in GetAllUsersParams,
+	) (GetAllUsersResult, error)
 	BlackListUser(
 		ctx context.Context,
 		in BlackListParams,
 	) error
-
 	IsUserBlackListed(
 		ctx context.Context,
 		in IsBlackListedParams,

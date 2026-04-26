@@ -39,7 +39,7 @@ func (r *CartRepository) UpdateQuantityItem(
 
 	val := cmd.Val()
 
-	if val == 0 {
+	if val <= 0 {
 		if err := r.pool.HDel(ctx, key, in.ProductID.String()).Err(); err != nil {
 			return cart_ports_out.UpdateQuantityItemResult{}, fmt.Errorf(
 				"delete item from cache: %w", err,
