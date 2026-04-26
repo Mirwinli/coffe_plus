@@ -10,17 +10,20 @@ import (
 )
 
 type AuthHTTPHandler struct {
-	authService auth_ports_in.AuthService
-	JWTConfig   core_http_jwt.Config
+	authService  auth_ports_in.AuthService
+	JWTConfig    core_http_jwt.Config
+	controlToken core_http_middleware.AccessTokenBlackList
 }
 
 func NewAuthHTTPHandler(
 	authService auth_ports_in.AuthService,
 	config core_http_jwt.Config,
+	controlToken core_http_middleware.AccessTokenBlackList,
 ) *AuthHTTPHandler {
 	return &AuthHTTPHandler{
-		authService: authService,
-		JWTConfig:   config,
+		authService:  authService,
+		JWTConfig:    config,
+		controlToken: controlToken,
 	}
 }
 
@@ -53,6 +56,35 @@ func (h *AuthHTTPHandler) Routes() []core_http_server.Route {
 			Method:  http.MethodDelete,
 			Path:    "/auth/logout",
 			Handler: h.Logout,
+		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/admin/users",
+			Handler: h.GetAllUsers,
+			Middleware: []core_http_middleware.Middleware{
+				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.Admin(),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
+			},
+		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/admin/users/{id}",
+			Handler: h.GetUser,
+			Middleware: []core_http_middleware.Middleware{
+				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.Admin(),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
+			},
+		},
+		{
+			Method:  http.MethodGet,
+			Path:    "/profile",
+			Handler: h.GetMyselfUser,
+			Middleware: []core_http_middleware.Middleware{
+				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
+			},
 		},
 	}
 }

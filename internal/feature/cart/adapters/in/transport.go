@@ -10,17 +10,20 @@ import (
 )
 
 type CartHTTPHandler struct {
-	cartService cart_ports_in.CartService
-	JWTConfig   core_http_jwt.Config
+	cartService  cart_ports_in.CartService
+	JWTConfig    core_http_jwt.Config
+	controlToken core_http_middleware.AccessTokenBlackList
 }
 
 func NewCartHTTPHandler(
 	cartService cart_ports_in.CartService,
 	jwtConfig core_http_jwt.Config,
+	controlToken core_http_middleware.AccessTokenBlackList,
 ) *CartHTTPHandler {
 	return &CartHTTPHandler{
-		cartService: cartService,
-		JWTConfig:   jwtConfig,
+		cartService:  cartService,
+		JWTConfig:    jwtConfig,
+		controlToken: controlToken,
 	}
 }
 
@@ -32,6 +35,7 @@ func (h *CartHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.AddProductInCart,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},
 		{
@@ -40,6 +44,7 @@ func (h *CartHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.ListCart,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},
 		{
@@ -48,6 +53,7 @@ func (h *CartHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.UpdateQuantityItem,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},
 		{
@@ -56,6 +62,7 @@ func (h *CartHTTPHandler) Routes() []core_http_server.Route {
 			Handler: h.DeleteCart,
 			Middleware: []core_http_middleware.Middleware{
 				core_http_middleware.ParseJWTToken(h.JWTConfig),
+				core_http_middleware.BlackListAccessToken(h.controlToken),
 			},
 		},
 	}

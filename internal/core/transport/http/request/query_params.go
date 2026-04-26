@@ -9,6 +9,31 @@ import (
 	"github.com/google/uuid"
 )
 
+func GetOffsetLimitQueryParams(r *http.Request) (*int, *int, error) {
+	const (
+		limitQueryParam  = "limit"
+		offsetQueryParam = "offset"
+	)
+
+	limit, err := GetIntQueryParams(r, limitQueryParam)
+	if err != nil {
+		return nil, nil, fmt.Errorf(
+			"get `offset` query param: %w",
+			err,
+		)
+	}
+
+	offset, err := GetIntQueryParams(r, offsetQueryParam)
+	if err != nil {
+		return nil, nil, fmt.Errorf(
+			"get `offset` query param: %w",
+			err,
+		)
+	}
+
+	return offset, limit, nil
+}
+
 func GetIntQueryParams(r *http.Request, key string) (*int, error) {
 	param := r.URL.Query().Get(key)
 	if param == "" {
@@ -47,4 +72,13 @@ func GetUUIDQueryParams(r *http.Request, key string) (*uuid.UUID, error) {
 	}
 
 	return &val, nil
+}
+
+func GetStringQueryParams(r *http.Request, key string) *string {
+	param := r.URL.Query().Get(key)
+	if param == "" {
+		return nil
+	}
+
+	return &param
 }

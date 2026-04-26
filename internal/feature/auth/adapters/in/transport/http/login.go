@@ -14,7 +14,7 @@ type AuthLoginRequest struct {
 	Password string `json:"password" validate:"required,min=6,max=100" example:"123password"`
 }
 
-type AuthLoginResponse UserDTOResponse
+type AuthLoginResponse UserAndAccessDTOResponse
 
 // Login godoc
 // @Summary     Вхід
@@ -81,6 +81,7 @@ func (h *AuthHTTPHandler) Login(rw http.ResponseWriter, r *http.Request) {
 		LastName:    result.LastName,
 		Email:       result.Email,
 		Role:        result.Role,
+		CreatedAt:   result.CreatedAt,
 		AccessToken: result.AccessToken,
 	}
 

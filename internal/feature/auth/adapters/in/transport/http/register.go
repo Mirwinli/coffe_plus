@@ -17,7 +17,7 @@ type RegisterRequest struct {
 	PhoneNumber string `json:"phone_number" validate:"required,min=10,max=13" example:"+380974526180"`
 }
 
-type RegisterResponse UserDTOResponse
+type RegisterResponse UserAndAccessDTOResponse
 
 // Register godoc
 // @Summary Реєстрація

@@ -60,7 +60,7 @@ func (r *AuthRepository) UpdateUser(ctx context.Context, in auth_ports_out.Updat
 		)
 	}
 
-	user = domainFromModel(userModel)
+	user = DomainFromModel(userModel)
 
 	return auth_ports_out.NewUpdateUserResult(user), nil
 }

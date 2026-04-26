@@ -11,6 +11,16 @@ import (
 	"github.com/google/uuid"
 )
 
+// DeleteCart godoc
+// @Summary Видалення кошика
+// @Description Видалення кошика та його вміст
+// @Tags cart
+// @Security BearerAuth
+// @Success 204
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cart [delete]
 func (h *CartHTTPHandler) DeleteCart(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

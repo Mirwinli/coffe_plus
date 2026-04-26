@@ -14,6 +14,20 @@ import (
 
 type GetProductsResponse []ProductDTOResponse
 
+// GetProducts godoc
+// @Summary Отримання усіх продуктів
+// @Tags product
+// @Security BearerAuth
+// @Produce json
+// @Param category_id query string false "category ID"
+// @Param limit query int false "limit"
+// @Param offset query int false "offset"
+// @Success 200 {object} GetProductsResponse "Продукт"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Not found"
+// @Router /products [get]
 func (h *ProductsHTTPHandler) GetProducts(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

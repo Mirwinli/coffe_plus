@@ -1,6 +1,10 @@
 package auth_ports_out
 
-import "github.com/google/uuid"
+import (
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type LoginUserAuthParams struct {
 	Email    string
@@ -26,6 +30,7 @@ type LoginUserAuthResult struct {
 	Email        string
 	PhoneNumber  string
 	Role         string
+	CreatedAt    time.Time
 }
 
 func NewLoginUserAuthResult(
@@ -37,6 +42,7 @@ func NewLoginUserAuthResult(
 	email string,
 	phoneNumber string,
 	role string,
+	createdAt time.Time,
 ) LoginUserAuthResult {
 	return LoginUserAuthResult{
 		ID:           id,
@@ -47,5 +53,6 @@ func NewLoginUserAuthResult(
 		PhoneNumber:  phoneNumber,
 		Role:         role,
 		PasswordHash: passwordHash,
+		CreatedAt:    createdAt,
 	}
 }

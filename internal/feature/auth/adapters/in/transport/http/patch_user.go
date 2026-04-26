@@ -16,14 +16,21 @@ import (
 	"github.com/google/uuid"
 )
 
-type PatchUserRequest struct {
-	FirstName   core_http_types.Nullable[string] `json:"first_name"`
-	LastName    core_http_types.Nullable[string] `json:"last_name"`
-	Password    core_http_types.Nullable[string] `json:"password"`
-	PhoneNumber core_http_types.Nullable[string] `json:"phone_number"`
+type PatchUserSwaggerRequest struct {
+	FirstName   *string `json:"first_name"   example:"Max"`
+	LastName    *string `json:"last_name"    example:"Trump"`
+	Password    *string `json:"password"     example:"123456hs"`
+	PhoneNumber *string `json:"phone_number" example:"+380974526180"`
 }
 
-type PatchUserResult struct {
+type PatchUserRequest struct {
+	FirstName   core_http_types.Nullable[string] `json:"first_name"  swaggertype:"string" example:"Max"`
+	LastName    core_http_types.Nullable[string] `json:"last_name"	 swaggertype:"string" example:"Trump"`
+	Password    core_http_types.Nullable[string] `json:"password"	 swaggertype:"string" example:"123456hs"`
+	PhoneNumber core_http_types.Nullable[string] `json:"phone_number" swaggertype:"string" example:"+380974526180"`
+}
+
+type PatchUserResponse struct {
 	UserID      uuid.UUID `json:"user_id"      example:"1dsa-123s-1s"`
 	Version     int       `json:"version"      example:"1"`
 	FirstName   string    `json:"first_name"   example:"First Name"`
@@ -101,6 +108,25 @@ func (r *PatchUserRequest) Validate() error {
 	return nil
 }
 
+// PatchUser godoc
+// @Summary Зміна користувача
+// @Description Зміна данних користувача
+// @Description Номеру телефону,Прізвище або Імя,Пароль
+// @Description Правила зміни полів:
+// @Description 1. **Поле не передано**: `description` ігноруєтся, значення в БД не змінюєтся
+// @Description 2. **Явно передано значення**: `description`: "Вийти погуляти в 6:30 з собакою" - змінюєьтся поле в БД
+// @Description Обмеження: Ніякі поля не можуть бути null
+// @Security BearerAuth
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body PatchUserSwaggerRequest true "PatchUser тіло запиту"
+// @Success 200 {object} PatchUserResponse "Змінений користувач"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 404 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 409 {object} core_http_response.ErrorResponse "Conflict"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /auth/user [patch]
 func (h *AuthHTTPHandler) PatchUser(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)
@@ -143,7 +169,7 @@ func (h *AuthHTTPHandler) PatchUser(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	user := patchedUser.User
-	response := PatchUserResult{
+	response := PatchUserResponse{
 		UserID:      user.ID,
 		Version:     user.Version,
 		FirstName:   user.FirstName,

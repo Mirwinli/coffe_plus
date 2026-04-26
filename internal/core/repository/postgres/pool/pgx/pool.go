@@ -6,6 +6,7 @@ import (
 	"time"
 
 	core_postgres_pool "github.com/Mirwinli/coffe_plus/internal/core/repository/postgres/pool"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -74,4 +75,17 @@ func (p *Pool) Exec(ctx context.Context, sql string, args ...any) (core_postgres
 
 func (p *Pool) OpTimeout() time.Duration {
 	return p.opTimeout
+}
+
+func (p *Pool) Begin(ctx context.Context) (core_postgres_pool.Tx, error) {
+	tx, err := p.Pool.Begin(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pgxTx{tx}, nil
+}
+
+func (p *Pool) SendBatch(ctx context.Context, b *pgx.Batch) pgx.BatchResults {
+	return p.Pool.SendBatch(ctx, b)
 }

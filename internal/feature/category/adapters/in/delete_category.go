@@ -11,6 +11,20 @@ import (
 	categories_ports_in "github.com/Mirwinli/coffe_plus/internal/feature/category/ports/in"
 )
 
+// DeleteCategory godoc
+// @Summary Видалення категорії
+// @Description Видалення категорії продуктів зі системи
+// @Description Щоб видалити категорію потрібно видалити спершу всі продукти цієї категорії
+// @Description Only for admins
+// @Security BearerAuth
+// @Param id path string true "Category ID"
+// @Tags category
+// @Success 204
+// @Failure 409 {object} core_http_response.ErrorResponse "Conflict"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cart/{id} [delete]
 func (h *CategoryHTTPHandler) DeleteCategory(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

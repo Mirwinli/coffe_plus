@@ -13,6 +13,17 @@ import (
 
 type ListCartResponse CartDTOResponse
 
+// ListCart godoc
+// @Summary Вивід кошика
+// @Description Вивід кошика та його вміст
+// @Security BearerAuth
+// @Produce json
+// @Tags cart
+// @Success 200 {object} ListCartResponse "Кошик"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unautorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /cart [get]
 func (h *CartHTTPHandler) ListCart(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

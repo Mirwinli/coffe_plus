@@ -9,6 +9,19 @@ import (
 	products_ports_in "github.com/Mirwinli/coffe_plus/internal/feature/products/ports/in"
 )
 
+// DeleteProduct godoc
+// @Summary Видалення продукта
+// @Description ВИдалення продукта з системи
+// @Description Admin Only
+// @Tags product
+// @Security BearerAuth
+// @Param id path string true "Product ID"
+// @Success 204
+// @Failure 400 {object} core_http_response.ErrorResponse "Bad request"
+// @Failure 404 {object} core_http_response.ErrorResponse "Not found"
+// @Failure 401 {object} core_http_response.ErrorResponse "Unauthorized"
+// @Failure 500 {object} core_http_response.ErrorResponse "Internal server error"
+// @Router /products/{id} [delete]
 func (h *ProductsHTTPHandler) DeleteProduct(rw http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	log := core_logger.FromContext(ctx)

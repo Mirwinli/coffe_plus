@@ -36,7 +36,8 @@ CREATE TABLE coffe_plus.products (
 
 CREATE TABLE coffe_plus.orders (
     id          UUID                  PRIMARY KEY,
-    user_id     UUID         NOT NULL REFERENCES coffe_plus.users(id),
+    version     BIGINT DEFAULT 1,
+    customer_id UUID         NOT NULL REFERENCES coffe_plus.users(id),
     status      VARCHAR(150) NOT NULL,
     total_price DECIMAL       NOT NULL,
     created_at  TIMESTAMPTZ  NOT NULL
@@ -44,8 +45,10 @@ CREATE TABLE coffe_plus.orders (
 
 CREATE TABLE coffe_plus.order_items (
     id              UUID             PRIMARY KEY,
-    order_id        UUID    NOT NULL REFERENCES coffe_plus.orders(id),
+    order_id        UUID    NOT NULL REFERENCES coffe_plus.orders(id) ON DELETE CASCADE,
     product_id      UUID    NOT NULL REFERENCES coffe_plus.products(id),
+    product_name    VARCHAR(100) NOT NULL,
+    image_url       TEXT NOT NULL,
     quantity        BIGINT  NOT NULL,
     price_at_time   DECIMAL NOT NULL
 );

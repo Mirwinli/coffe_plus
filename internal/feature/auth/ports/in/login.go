@@ -2,6 +2,7 @@ package auth_ports_in
 
 import (
 	"fmt"
+	"time"
 
 	core_errors "github.com/Mirwinli/coffe_plus/internal/core/errors"
 	"github.com/google/uuid"
@@ -64,6 +65,7 @@ type LoginAuthResult struct {
 	Email        string
 	PhoneNumber  string
 	Role         string
+	CreatedAt    time.Time
 	AccessToken  string
 	RefreshToken string
 }
@@ -76,6 +78,7 @@ func NewLoginAuthResult(
 	email string,
 	phoneNumber string,
 	role string,
+	createdAt time.Time,
 	accessToken string,
 	refreshToken string,
 ) LoginAuthResult {
@@ -87,6 +90,7 @@ func NewLoginAuthResult(
 		Email:        email,
 		PhoneNumber:  phoneNumber,
 		Role:         role,
+		CreatedAt:    createdAt,
 		AccessToken:  accessToken,
 		RefreshToken: refreshToken,
 	}
